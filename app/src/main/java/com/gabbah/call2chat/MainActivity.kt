@@ -111,6 +111,9 @@ class MainActivity : AppCompatActivity() {
         b.btnNotif.setOnClickListener { requestNotifications() }
         b.btnOverlay.setOnClickListener { requestOverlay() }
         b.btnTest.setOnClickListener { testMessage() }
+        b.btnOverlayTest.setOnClickListener { testOverlay() }
+        b.btnXiaomi.visibility = if (isXiaomi()) android.view.View.VISIBLE else android.view.View.GONE
+        b.btnXiaomi.setOnClickListener { openXiaomiPermissions() }
         b.btnPro.setOnClickListener { if (!prefs.isPro) buyPro() }
     }
 
@@ -234,6 +237,34 @@ class MainActivity : AppCompatActivity() {
         for (i in tries) {
             try { startActivity(i); return } catch (e: Exception) { }
         }
+    }
+
+    private fun isXiaomi() = Build.MANUFACTURER.lowercase().let {
+        it.contains("xiaomi") || it.contains("redmi") || it.contains("poco")
+    }
+
+    /** Su Xiaomi serve anche "Mostra finestre pop-up in background". */
+    private fun openXiaomiPermissions() {
+        val tries = listOf(
+            Intent("miui.intent.action.APP_PERM_EDITOR")
+                .setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity")
+                .putExtra("extra_pkgname", packageName),
+            Intent("miui.intent.action.APP_PERM_EDITOR").putExtra("extra_pkgname", packageName),
+            Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                android.net.Uri.fromParts("package", packageName, null))
+        )
+        Toast.makeText(this, R.string.xiaomi_hint, Toast.LENGTH_LONG).show()
+        for (i in tries) {
+            try { startActivity(i); return } catch (e: Exception) { }
+        }
+    }
+
+    /** Mostra la scheda tra 5 secondi, così si può uscire dall'app e vederla sopra le altre. */
+    private fun testOverlay() {
+        if (!Overlay.canShow(this)) { requestOverlay(); return }
+        Toast.makeText(this, R.string.overlay_test_toast, Toast.LENGTH_LONG).show()
+        val ctx = applicationContext
+        android.os.Handler(mainLooper).postDelayed({ Overlay.show(ctx, "393331234567") }, 5000)
     }
 
     private fun requestOverlay() {

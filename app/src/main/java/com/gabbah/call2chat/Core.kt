@@ -21,11 +21,14 @@ object Core {
         if (!prefs.isWithinHours()) return
         val number = Numbers.toWhatsApp(raw, Numbers.region(ctx)) ?: return
         if (prefs.isExcluded(number)) return
-        if (prefs.recentlySeen(number)) return
 
+        // La scheda con "Invia" compare sempre: l'invio lo decide la persona
+        Overlay.show(ctx, number)
+
+        // La notifica invece rispetta la pausa per lo stesso numero
+        if (prefs.recentlySeen(number)) return
         prefs.addCall(number)
         notify(ctx, number)
-        Overlay.show(ctx, number)
     }
 
     fun notify(ctx: Context, number: String) {

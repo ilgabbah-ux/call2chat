@@ -63,4 +63,8 @@
     <string name="overlay_sub">Not in your contacts: send your message now</string>
     <string name="overlay_send">Send on WhatsApp</string>
     <string name="overlay_close">Close</string>
+    <string name="btn_overlay_test">Test the Send card</string>
+    <string name="overlay_test_toast">Leave the app: the card appears in 5 seconds</string>
+    <string name="btn_xiaomi">Xiaomi: allow pop-ups in background</string>
+    <string name="xiaomi_hint">Turn on "Display pop-up windows while running in the background" and "Show on lock screen"</string>
 </resources>
