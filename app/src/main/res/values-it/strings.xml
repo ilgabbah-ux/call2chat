@@ -51,4 +51,7 @@
     <string name="history_sent">inviato</string>
 
     <string name="footer">Tutto resta sul tuo telefono. Funziona con WhatsApp; non affiliata a WhatsApp o Meta.</string>
+    <string name="role_help_title">Ancora un passo</string>
+    <string name="role_help_text">Il telefono non ha mostrato la richiesta. Apri Impostazioni → App predefinite → "App ID chiamante e spam" (o "Filtro chiamate") e scegli Call2Chat.</string>
+    <string name="role_help_open">Apri impostazioni</string>
 </resources>

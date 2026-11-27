@@ -35,7 +35,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var billing: Billing
 
     private val roleLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { refresh() }
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            refresh()
+            if (!hasRole()) showRoleHelp()
+        }
     private val notifLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { refresh() }
     private val updateLauncher =
@@ -200,7 +203,33 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.role_unavailable, Toast.LENGTH_LONG).show()
             return
         }
-        roleLauncher.launch(rm.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING))
+        try {
+            roleLauncher.launch(rm.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING))
+        } catch (e: Exception) {
+            showRoleHelp()
+        }
+    }
+
+    /** Il telefono non ha mostrato la richiesta (o è stata rifiutata): si fa dalle impostazioni. */
+    private fun showRoleHelp() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.role_help_title)
+            .setMessage(R.string.role_help_text)
+            .setPositiveButton(R.string.role_help_open) { _, _ -> openDefaultApps() }
+            .setNegativeButton(R.string.later, null)
+            .show()
+    }
+
+    private fun openDefaultApps() {
+        val tries = listOf(
+            Intent(android.provider.Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS),
+            Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                android.net.Uri.fromParts("package", packageName, null)),
+            Intent(android.provider.Settings.ACTION_SETTINGS)
+        )
+        for (i in tries) {
+            try { startActivity(i); return } catch (e: Exception) { }
+        }
     }
 
     private fun hasNotifications(): Boolean =
