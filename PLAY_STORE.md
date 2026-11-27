@@ -51,3 +51,10 @@ Unknown caller? Send them your WhatsApp message with one tap.
 - Il contatore dei 100 messaggi conta ogni volta che si apre WhatsApp dalla notifica.
 - Aggiornamento automatico all'apertura con gli aggiornamenti in-app di Google Play (funziona quando l'app è scaricata da Play).
 - Compilare: `./gradlew bundleRelease` (serve `keystore.properties` con i dati della chiave, non nel repo).
+
+## Due versioni dell'app
+- **github**: APK in `download/`, si aggiorna da solo leggendo `download/version.json`.
+  Per pubblicare un aggiornamento: alza versionCode/versionName, `./gradlew assembleGithubRelease`,
+  copia l'APK in `download/Call2Chat.apk` e aggiorna `download/version.json` con lo stesso versionCode.
+- **play**: `./gradlew bundlePlayRelease` → `app/build/outputs/bundle/playRelease/app-play-release.aab` da caricare in Play Console.
+  Non contiene l'auto-aggiornamento (Google non lo permette): usa gli aggiornamenti in-app di Google Play.

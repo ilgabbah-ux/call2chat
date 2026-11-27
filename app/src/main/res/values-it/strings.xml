@@ -63,4 +63,6 @@
     <string name="overlay_test_toast">Esci dall\'app: la scheda compare tra 5 secondi</string>
     <string name="btn_xiaomi">Xiaomi: consenti pop-up in background</string>
     <string name="xiaomi_hint">Attiva "Mostra finestre pop-up durante l\'esecuzione in background" e "Mostra sulla schermata di blocco"</string>
+    <string name="update_downloading">Scarico Call2Chat %1$s…</string>
+    <string name="update_allow">Consenti a Call2Chat di installare aggiornamenti, poi torna indietro</string>
 </resources>

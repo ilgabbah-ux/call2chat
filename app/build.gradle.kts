@@ -19,8 +19,8 @@ android {
         applicationId = "com.gabbah.call2chat"
         minSdk = 29
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.5"
+        versionCode = 7
+        versionName = "1.6"
     }
 
     signingConfigs {
@@ -32,6 +32,14 @@ android {
                 keyPassword = keyProps.getProperty("keyPassword")
             }
         }
+    }
+
+    flavorDimensions += "store"
+    productFlavors {
+        // APK da scaricare da GitHub: si aggiorna da solo
+        create("github") { dimension = "store" }
+        // Play Store: gli aggiornamenti li fa Google Play
+        create("play") { dimension = "store" }
     }
 
     buildTypes {

@@ -67,4 +67,6 @@
     <string name="overlay_test_toast">Leave the app: the card appears in 5 seconds</string>
     <string name="btn_xiaomi">Xiaomi: allow pop-ups in background</string>
     <string name="xiaomi_hint">Turn on "Display pop-up windows while running in the background" and "Show on lock screen"</string>
+    <string name="update_downloading">Downloading Call2Chat %1$s…</string>
+    <string name="update_allow">Allow Call2Chat to install updates, then go back</string>
 </resources>

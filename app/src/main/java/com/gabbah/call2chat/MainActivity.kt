@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         bindSettings()
         checkForUpdate()
+        Updater.check(this)
         if (intent.getBooleanExtra(EXTRA_PAYWALL, false)) showPaywall()
     }
 
