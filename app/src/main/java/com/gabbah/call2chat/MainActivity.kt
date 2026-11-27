@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         b.btnRole.setOnClickListener { requestRole() }
         b.btnNotif.setOnClickListener { requestNotifications() }
+        b.btnOverlay.setOnClickListener { requestOverlay() }
         b.btnTest.setOnClickListener { testMessage() }
         b.btnPro.setOnClickListener { if (!prefs.isPro) buyPro() }
     }
@@ -120,7 +121,10 @@ class MainActivity : AppCompatActivity() {
         b.btnRole.text = getString(if (roleOk) R.string.btn_role_done else R.string.btn_role)
         b.btnNotif.isEnabled = !notifOk
         b.btnNotif.text = getString(if (notifOk) R.string.btn_notif_done else R.string.btn_notif)
-        b.setupCard.visibility = if (roleOk && notifOk) android.view.View.GONE else android.view.View.VISIBLE
+        val overlayOk = Overlay.canShow(this)
+        b.btnOverlay.isEnabled = !overlayOk
+        b.btnOverlay.text = getString(if (overlayOk) R.string.btn_overlay_done else R.string.btn_overlay)
+        b.setupCard.visibility = if (roleOk && notifOk && overlayOk) android.view.View.GONE else android.view.View.VISIBLE
 
         b.status.text = getString(
             when {
@@ -229,6 +233,15 @@ class MainActivity : AppCompatActivity() {
         )
         for (i in tries) {
             try { startActivity(i); return } catch (e: Exception) { }
+        }
+    }
+
+    private fun requestOverlay() {
+        try {
+            startActivity(Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                android.net.Uri.parse("package:$packageName")))
+        } catch (e: Exception) {
+            openDefaultApps()
         }
     }
 

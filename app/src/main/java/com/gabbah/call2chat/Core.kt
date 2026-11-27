@@ -25,6 +25,7 @@ object Core {
 
         prefs.addCall(number)
         notify(ctx, number)
+        Overlay.show(ctx, number)
     }
 
     fun notify(ctx: Context, number: String) {

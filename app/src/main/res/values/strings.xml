@@ -18,7 +18,7 @@
     <string name="status_no_wa">WhatsApp not found on this phone</string>
 
     <string name="setup_title">Setup</string>
-    <string name="setup_desc">Two quick steps. Call2Chat never blocks calls and never reads your contacts: Android only tells it about numbers you don\'t have saved.</string>
+    <string name="setup_desc">Three quick steps. Call2Chat never blocks calls and never reads your contacts: Android only tells it about numbers you don\'t have saved.</string>
     <string name="btn_role">1 · Set as call screening app</string>
     <string name="btn_role_done">✓ Call screening active</string>
     <string name="btn_notif">2 · Allow notifications</string>
@@ -58,4 +58,9 @@
     <string name="role_help_title">One more step</string>
     <string name="role_help_text">Your phone did not show the request. Open Settings → Default apps → "Caller ID &amp; spam app" (or "Call screening") and choose Call2Chat.</string>
     <string name="role_help_open">Open settings</string>
+    <string name="btn_overlay">3 · Show the Send button during calls</string>
+    <string name="btn_overlay_done">✓ Send button during calls</string>
+    <string name="overlay_sub">Not in your contacts: send your message now</string>
+    <string name="overlay_send">Send on WhatsApp</string>
+    <string name="overlay_close">Close</string>
 </resources>

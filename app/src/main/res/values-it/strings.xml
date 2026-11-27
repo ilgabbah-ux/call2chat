@@ -16,7 +16,7 @@
     <string name="status_no_wa">WhatsApp non trovato su questo telefono</string>
 
     <string name="setup_title">Configurazione</string>
-    <string name="setup_desc">Due passaggi veloci. Call2Chat non blocca mai le chiamate e non legge la tua rubrica: è Android a segnalargli solo i numeri che non hai salvato.</string>
+    <string name="setup_desc">Tre passaggi veloci. Call2Chat non blocca mai le chiamate e non legge la tua rubrica: è Android a segnalargli solo i numeri che non hai salvato.</string>
     <string name="btn_role">1 · Imposta come filtro chiamate</string>
     <string name="btn_role_done">✓ Filtro chiamate attivo</string>
     <string name="btn_notif">2 · Consenti le notifiche</string>
@@ -54,4 +54,9 @@
     <string name="role_help_title">Ancora un passo</string>
     <string name="role_help_text">Il telefono non ha mostrato la richiesta. Apri Impostazioni → App predefinite → "App ID chiamante e spam" (o "Filtro chiamate") e scegli Call2Chat.</string>
     <string name="role_help_open">Apri impostazioni</string>
+    <string name="btn_overlay">3 · Mostra Invia durante la chiamata</string>
+    <string name="btn_overlay_done">✓ Invia durante la chiamata</string>
+    <string name="overlay_sub">Non è in rubrica: mandagli subito il tuo messaggio</string>
+    <string name="overlay_send">Invia su WhatsApp</string>
+    <string name="overlay_close">Chiudi</string>
 </resources>
