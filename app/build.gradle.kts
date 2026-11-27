@@ -19,8 +19,8 @@ android {
         applicationId = "com.gabbah.call2chat"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     signingConfigs {
@@ -36,8 +36,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (keyProps.isNotEmpty()) signingConfig = signingConfigs.getByName("release")
         }
@@ -65,3 +65,10 @@ dependencies {
 }
 
 dependencies { testImplementation("junit:junit:4.13.2") }
+
+android { testOptions { unitTests { isIncludeAndroidResources = true } } }
+dependencies {
+    testImplementation("org.robolectric:robolectric:4.16")
+    testImplementation("androidx.test:core:1.7.0")
+}
+tasks.withType<Test>().configureEach { systemProperty("robolectric.offline", "true"); systemProperty("robolectric.dependency.dir", "/root/robolectric-jars") }
