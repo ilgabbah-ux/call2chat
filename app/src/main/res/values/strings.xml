@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Call2Chat</string>
+
+    <string name="default_message">Hi! I saw your call but I can\'t answer right now. Write me here and I\'ll reply as soon as I can 👍</string>
+
+    <string name="channel_name">Calls from unknown numbers</string>
+    <string name="channel_desc">Ready-to-send message for numbers not in your contacts</string>
+    <string name="notif_title">Call from %1$s</string>
+    <string name="notif_text">Tap to send your message on WhatsApp</string>
+    <string name="notif_action">Send</string>
+    <string name="notif_limit">You used your free messages: unlock Pro to keep going</string>
+    <string name="no_whatsapp">WhatsApp is not installed</string>
+
+    <string name="status_setup">Finish the setup to start</string>
+    <string name="status_active">Active: unknown callers get your message</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_no_wa">WhatsApp not found on this phone</string>
+
+    <string name="setup_title">Setup</string>
+    <string name="setup_desc">Two quick steps. Call2Chat never blocks calls and never reads your contacts: Android only tells it about numbers you don\'t have saved.</string>
+    <string name="btn_role">1 · Set as call screening app</string>
+    <string name="btn_role_done">✓ Call screening active</string>
+    <string name="btn_notif">2 · Allow notifications</string>
+    <string name="btn_notif_done">✓ Notifications allowed</string>
+    <string name="role_unavailable">This phone does not support call screening apps</string>
+
+    <string name="msg_title">Your message</string>
+    <string name="send_with">Send with</string>
+    <string name="wa" translatable="false">WhatsApp</string>
+    <string name="wa_business" translatable="false">WA Business</string>
+    <string name="btn_test">Preview in WhatsApp</string>
+
+    <string name="rules_title">Rules</string>
+    <string name="cooldown_hint">Don\'t repeat the same number for (hours)</string>
+    <string name="hours_switch">Only during these hours</string>
+    <string name="hours_from">From %1$s</string>
+    <string name="hours_to">To %1$s</string>
+    <string name="excluded_hint">Excluded numbers (one per line)</string>
+
+    <string name="plan_title">Plan</string>
+    <string name="plan_free">Free messages used: %1$d of %2$d</string>
+    <string name="plan_pro">Pro unlocked: unlimited messages. Thank you!</string>
+    <string name="btn_pro">Unlock Pro</string>
+    <string name="btn_pro_price">Unlock Pro · %1$s</string>
+    <string name="btn_pro_done">Pro active</string>
+    <string name="billing_unavailable">Purchase not available right now. Try again later.</string>
+    <string name="paywall_title">Free messages finished</string>
+    <string name="paywall_text">You sent your %1$d free messages. Unlock Pro once to keep answering every unknown caller, forever.</string>
+    <string name="later">Later</string>
+
+    <string name="history_title">Recent unknown calls</string>
+    <string name="history_empty">No calls yet</string>
+    <string name="history_send">Send</string>
+    <string name="history_sent">sent</string>
+
+    <string name="footer">Everything stays on your phone. Works with WhatsApp; not affiliated with WhatsApp or Meta.</string>
+</resources>

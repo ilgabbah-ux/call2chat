@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_message">Ciao! Ho visto la tua chiamata ma ora non posso rispondere. Scrivimi qui e ti rispondo appena posso 👍</string>
+
+    <string name="channel_name">Chiamate da numeri sconosciuti</string>
+    <string name="channel_desc">Messaggio pronto per i numeri che non hai in rubrica</string>
+    <string name="notif_title">Chiamata da %1$s</string>
+    <string name="notif_text">Tocca per inviare il tuo messaggio su WhatsApp</string>
+    <string name="notif_action">Invia</string>
+    <string name="notif_limit">Hai finito i messaggi gratis: sblocca Pro per continuare</string>
+    <string name="no_whatsapp">WhatsApp non è installato</string>
+
+    <string name="status_setup">Completa la configurazione per partire</string>
+    <string name="status_active">Attiva: chi non è in rubrica riceve il tuo messaggio</string>
+    <string name="status_paused">In pausa</string>
+    <string name="status_no_wa">WhatsApp non trovato su questo telefono</string>
+
+    <string name="setup_title">Configurazione</string>
+    <string name="setup_desc">Due passaggi veloci. Call2Chat non blocca mai le chiamate e non legge la tua rubrica: è Android a segnalargli solo i numeri che non hai salvato.</string>
+    <string name="btn_role">1 · Imposta come filtro chiamate</string>
+    <string name="btn_role_done">✓ Filtro chiamate attivo</string>
+    <string name="btn_notif">2 · Consenti le notifiche</string>
+    <string name="btn_notif_done">✓ Notifiche consentite</string>
+    <string name="role_unavailable">Questo telefono non supporta le app di filtro chiamate</string>
+
+    <string name="msg_title">Il tuo messaggio</string>
+    <string name="send_with">Invia con</string>
+    <string name="btn_test">Anteprima in WhatsApp</string>
+
+    <string name="rules_title">Regole</string>
+    <string name="cooldown_hint">Non ripetere lo stesso numero per (ore)</string>
+    <string name="hours_switch">Solo in questi orari</string>
+    <string name="hours_from">Dalle %1$s</string>
+    <string name="hours_to">Alle %1$s</string>
+    <string name="excluded_hint">Numeri esclusi (uno per riga)</string>
+
+    <string name="plan_title">Piano</string>
+    <string name="plan_free">Messaggi gratis usati: %1$d su %2$d</string>
+    <string name="plan_pro">Pro sbloccato: messaggi illimitati. Grazie!</string>
+    <string name="btn_pro">Sblocca Pro</string>
+    <string name="btn_pro_price">Sblocca Pro · %1$s</string>
+    <string name="btn_pro_done">Pro attivo</string>
+    <string name="billing_unavailable">Acquisto non disponibile ora. Riprova più tardi.</string>
+    <string name="paywall_title">Messaggi gratis finiti</string>
+    <string name="paywall_text">Hai mandato i tuoi %1$d messaggi gratis. Sblocca Pro una volta sola e rispondi a tutti i numeri sconosciuti, per sempre.</string>
+    <string name="later">Più tardi</string>
+
+    <string name="history_title">Ultime chiamate sconosciute</string>
+    <string name="history_empty">Ancora nessuna chiamata</string>
+    <string name="history_send">Invia</string>
+    <string name="history_sent">inviato</string>
+
+    <string name="footer">Tutto resta sul tuo telefono. Funziona con WhatsApp; non affiliata a WhatsApp o Meta.</string>
+</resources>
