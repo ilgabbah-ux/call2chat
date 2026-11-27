@@ -33,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
     private lateinit var prefs: Prefs
     private lateinit var billing: Billing
+    private val prefsListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "history" || key == "sent") runOnUiThread { refreshHistory(); refreshPlan() }
+    }
 
     private val roleLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -65,6 +68,16 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (intent.getBooleanExtra(EXTRA_PAYWALL, false)) showPaywall()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        prefs.registerListener(prefsListener)
+    }
+
+    override fun onStop() {
+        prefs.unregisterListener(prefsListener)
+        super.onStop()
     }
 
     override fun onResume() {
@@ -112,6 +125,7 @@ class MainActivity : AppCompatActivity() {
         b.btnOverlay.setOnClickListener { requestOverlay() }
         b.btnTest.setOnClickListener { testMessage() }
         b.btnOverlayTest.setOnClickListener { testOverlay() }
+        b.footer.text = getString(R.string.footer) + "\n" + getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
         b.btnXiaomi.visibility = if (isXiaomi()) android.view.View.VISIBLE else android.view.View.GONE
         b.btnXiaomi.setOnClickListener { openXiaomiPermissions() }
         b.btnPro.setOnClickListener { if (!prefs.isPro) buyPro() }

@@ -25,10 +25,10 @@ object Core {
         // La scheda con "Invia" compare sempre: l'invio lo decide la persona
         Overlay.show(ctx, number)
 
-        // La notifica invece rispetta la pausa per lo stesso numero
-        if (prefs.recentlySeen(number)) return
+        // Ogni chiamata va nello storico; la notifica invece rispetta la pausa
+        val seen = prefs.recentlySeen(number)
         prefs.addCall(number)
-        notify(ctx, number)
+        if (!seen) { prefs.markNotified(number); notify(ctx, number) }
     }
 
     fun notify(ctx: Context, number: String) {

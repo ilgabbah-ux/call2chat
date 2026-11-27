@@ -25,9 +25,10 @@ class FlowTest {
         val nm = app.getSystemService(NotificationManager::class.java)
         assertEquals(1, shadowOf(nm).allNotifications.size)
 
-        // stesso numero subito dopo: niente seconda notifica
+        // stesso numero subito dopo: niente seconda notifica, ma finisce nello storico
         Core.onUnknownCall(app, "+393331234567")
         assertEquals(1, shadowOf(nm).allNotifications.size)
+        assertEquals(2, Prefs(app).history().size)
 
         val i = Intent(app, SendActivity::class.java).putExtra(SendActivity.EXTRA_NUMBER, "393331234567")
         ActivityScenario.launch<SendActivity>(i).close()

@@ -91,11 +91,22 @@ class Prefs(ctx: Context) {
     }
 
     /** true se il numero è già stato proposto entro le ore di pausa */
+    /** true se a quel numero è già stata proposta la notifica entro le ore di pausa */
     fun recentlySeen(number: String, now: Long = System.currentTimeMillis()): Boolean {
         val h = cooldownHours
         if (h == 0) return false
-        return history().any { it.number == number && now - it.time < h * 3_600_000L }
+        val last = p.getLong("notified_$number", 0L)
+        return last > 0 && now - last < h * 3_600_000L
     }
+
+    fun markNotified(number: String) =
+        p.edit().putLong("notified_$number", System.currentTimeMillis()).apply()
+
+    fun registerListener(l: SharedPreferences.OnSharedPreferenceChangeListener) =
+        p.registerOnSharedPreferenceChangeListener(l)
+
+    fun unregisterListener(l: SharedPreferences.OnSharedPreferenceChangeListener) =
+        p.unregisterOnSharedPreferenceChangeListener(l)
 
     fun addCall(number: String) {
         saveHistory(listOf(Entry(number, System.currentTimeMillis(), false)) + history())
