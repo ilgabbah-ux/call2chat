@@ -15,9 +15,127 @@ class Prefs(ctx: Context) {
         get() = p.getBoolean("enabled", true)
         set(v) = p.edit().putBoolean("enabled", v).apply()
 
-    var message: String
-        get() = p.getString("message", null) ?: app.getString(R.string.default_message)
-        set(v) = p.edit().putString("message", v).apply()
+    // ---- Messaggi pronti ----
+
+    fun templates(): List<Template> {
+        val raw = p.getString("templates", null)
+        if (raw == null) {
+            // Prima volta: il messaggio di prima (se c'era) + tre esempi
+            val first = Template(app.getString(R.string.tpl_default_name),
+                p.getString("message", null) ?: app.getString(R.string.default_message))
+            val list = listOf(
+                first,
+                Template(app.getString(R.string.tpl_meeting_name), app.getString(R.string.tpl_meeting_text)),
+                Template(app.getString(R.string.tpl_ride_name), app.getString(R.string.tpl_ride_text)),
+                Template(app.getString(R.string.tpl_closed_name), app.getString(R.string.tpl_closed_text))
+            )
+            saveTemplates(list)
+            return list
+        }
+        val arr = JSONArray(raw)
+        return (0 until arr.length()).map {
+            val o = arr.getJSONObject(it); Template(o.optString("n"), o.optString("t"))
+        }.ifEmpty { listOf(Template(app.getString(R.string.tpl_default_name), app.getString(R.string.default_message))) }
+    }
+
+    fun saveTemplates(list: List<Template>) {
+        val arr = JSONArray()
+        list.forEach { arr.put(JSONObject().put("n", it.name).put("t", it.text)) }
+        p.edit().putString("templates", arr.toString()).apply()
+        defaultIndex = defaultIndex.coerceIn(0, list.size - 1)
+        offIndex = offIndex.coerceIn(0, list.size - 1)
+    }
+
+    /** Messaggio predefinito (orario normale) */
+    var defaultIndex: Int
+        get() = p.getInt("tpl_default", 0)
+        set(v) = p.edit().putInt("tpl_default", v).apply()
+
+    var offEnabled: Boolean
+        get() = p.getBoolean("off_on", false)
+        set(v) = p.edit().putBoolean("off_on", v).apply()
+
+    var workStart: Int
+        get() = p.getInt("work_start", 9 * 60)
+        set(v) = p.edit().putInt("work_start", v).apply()
+
+    var workEnd: Int
+        get() = p.getInt("work_end", 19 * 60)
+        set(v) = p.edit().putInt("work_end", v).apply()
+
+    var weekendOff: Boolean
+        get() = p.getBoolean("weekend_off", true)
+        set(v) = p.edit().putBoolean("weekend_off", v).apply()
+
+    /** Messaggio fuori orario (di base "Fuori orario") */
+    var offIndex: Int
+        get() = p.getInt("tpl_off", 3)
+        set(v) = p.edit().putInt("tpl_off", v).apply()
+
+    fun schedule() = Schedule(offEnabled, workStart, workEnd, weekendOff, offIndex)
+
+    /** Indice del messaggio da usare adesso, secondo l'orario */
+    fun autoIndex(now: Calendar = Calendar.getInstance()): Int {
+        val n = templates().size
+        return (if (schedule().isOffHours(now)) offIndex else defaultIndex).coerceIn(0, n - 1)
+    }
+
+    /** Testo pronto da inviare (con le variabili già sostituite) */
+    fun messageFor(index: Int? = null, now: Calendar = Calendar.getInstance()): String {
+        val list = templates()
+        val i = (index ?: autoIndex(now)).coerceIn(0, list.size - 1)
+        return Vars.render(list[i].text, now)
+    }
+
+    /** Il testo del messaggio automatico di adesso */
+    val message: String get() = messageFor()
+
+    // ---- Passaggi confermati a mano nella configurazione ----
+
+    fun isConfirmed(step: String) = p.getBoolean("ok_$step", false)
+    fun setConfirmed(step: String, v: Boolean) = p.edit().putBoolean("ok_$step", v).apply()
+
+    var setupSeen: Boolean
+        get() = p.getBoolean("setup_seen", false)
+        set(v) = p.edit().putBoolean("setup_seen", v).apply()
+
+    // ---- Statistiche ----
+
+    data class Stats(val calls7: Int, val sent7: Int, val callsAll: Int, val sentAll: Int, val days: List<Pair<String, Int>>)
+
+    private fun dayKey(c: Calendar) = "%04d%02d%02d".format(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH))
+
+    private fun bump(field: String, now: Calendar) {
+        val o = JSONObject(p.getString("stats", "{}"))
+        val k = dayKey(now)
+        val d = o.optJSONObject(k) ?: JSONObject()
+        d.put(field, d.optInt(field) + 1)
+        o.put(k, d)
+        // tengo solo gli ultimi 60 giorni
+        val keys = o.keys().asSequence().toList().sorted()
+        keys.dropLast(60).forEach { o.remove(it) }
+        p.edit().putString("stats", o.toString())
+            .putInt("stat_$field", p.getInt("stat_$field", 0) + 1).apply()
+    }
+
+    fun countCall(now: Calendar = Calendar.getInstance()) = bump("c", now)
+    fun countSent(now: Calendar = Calendar.getInstance()) = bump("s", now)
+
+    fun stats(now: Calendar = Calendar.getInstance()): Stats {
+        val o = JSONObject(p.getString("stats", "{}"))
+        val days = (6 downTo 0).map { back ->
+            val c = now.clone() as Calendar
+            c.add(Calendar.DAY_OF_YEAR, -back)
+            val d = o.optJSONObject(dayKey(c))
+            Triple(java.text.SimpleDateFormat("EEE", java.util.Locale.getDefault()).format(c.time),
+                d?.optInt("c") ?: 0, d?.optInt("s") ?: 0)
+        }
+        return Stats(
+            calls7 = days.sumOf { it.second }, sent7 = days.sumOf { it.third },
+            callsAll = p.getInt("stat_c", 0), sentAll = p.getInt("stat_s", 0),
+            days = days.map { it.first to it.second }
+        )
+    }
 
     /** "com.whatsapp" oppure "com.whatsapp.w4b" */
     var targetPackage: String

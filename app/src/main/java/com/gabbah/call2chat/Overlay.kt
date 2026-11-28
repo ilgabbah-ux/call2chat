@@ -73,7 +73,44 @@ object Overlay {
             setPadding(0, dp(2), 0, dp(10))
         }
 
-        val row = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL }
+        // Scelta del messaggio: parte selezionato quello automatico (secondo l'orario)
+        val templates = prefs.templates()
+        var selected = prefs.autoIndex()
+        val preview = TextView(ctx).apply {
+            text = prefs.messageFor(selected)
+            setTextColor(0xE6FFFFFF.toInt())
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+            maxLines = 3
+            ellipsize = android.text.TextUtils.TruncateAt.END
+            setPadding(dp(12), dp(8), dp(12), dp(8))
+            background = GradientDrawable().apply { setColor(0x1FFFFFFF); cornerRadius = dp(12).toFloat() }
+        }
+        val chips = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL }
+        val chipViews = mutableListOf<TextView>()
+        fun paint() = chipViews.forEachIndexed { i, c ->
+            val on = i == selected
+            c.setTextColor(if (on) 0xFF0A2E25.toInt() else 0xFFFFFFFF.toInt())
+            (c.background as GradientDrawable).setColor(if (on) 0xFFFFC531.toInt() else 0x33FFFFFF)
+        }
+        templates.forEachIndexed { i, t ->
+            val c = TextView(ctx).apply {
+                text = t.name
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+                setPadding(dp(12), dp(6), dp(12), dp(6))
+                background = GradientDrawable().apply { cornerRadius = dp(16).toFloat() }
+                setOnClickListener { selected = i; preview.text = prefs.messageFor(i); paint() }
+            }
+            chipViews += c
+            chips.addView(c, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(6) })
+        }
+        paint()
+        val chipScroll = android.widget.HorizontalScrollView(ctx).apply {
+            isHorizontalScrollBarEnabled = false
+            addView(chips)
+            setPadding(0, 0, 0, dp(8))
+        }
+
+        val row = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(10), 0, 0) }
         val close = Button(ctx).apply {
             text = ctx.getString(R.string.overlay_close)
             setTextColor(0xFFFFFFFF.toInt())
@@ -96,6 +133,7 @@ object Overlay {
                 ctx.startActivity(
                     Intent(ctx, SendActivity::class.java)
                         .putExtra(SendActivity.EXTRA_NUMBER, number)
+                        .putExtra(SendActivity.EXTRA_TEMPLATE, selected)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             }
@@ -105,6 +143,10 @@ object Overlay {
 
         card.addView(title)
         card.addView(sub)
+        if (prefs.canSend) {
+            if (templates.size > 1) card.addView(chipScroll)
+            card.addView(preview)
+        }
         card.addView(row)
 
         val lp = WindowManager.LayoutParams(

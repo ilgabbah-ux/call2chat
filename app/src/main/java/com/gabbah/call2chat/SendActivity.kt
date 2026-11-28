@@ -26,9 +26,11 @@ class SendActivity : Activity() {
             return
         }
 
-        if (Core.openChat(this, number, prefs.message)) {
+        val tpl = if (intent.hasExtra(EXTRA_TEMPLATE)) intent.getIntExtra(EXTRA_TEMPLATE, 0) else null
+        if (Core.openChat(this, number, prefs.messageFor(tpl))) {
             if (!prefs.isPro) prefs.sentCount = prefs.sentCount + 1
             prefs.markSent(number)
+            prefs.countSent()
         } else {
             Toast.makeText(this, R.string.no_whatsapp, Toast.LENGTH_LONG).show()
         }
@@ -37,5 +39,6 @@ class SendActivity : Activity() {
 
     companion object {
         const val EXTRA_NUMBER = "number"
+        const val EXTRA_TEMPLATE = "template"
     }
 }

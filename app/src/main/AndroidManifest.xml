@@ -29,6 +29,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SetupActivity"
+            android:exported="false" />
+
         <!-- Aperta dalla notifica: prepara il messaggio e chiude subito -->
         <activity
             android:name=".SendActivity"

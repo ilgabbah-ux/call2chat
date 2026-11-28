@@ -21,6 +21,7 @@ object Core {
         if (!prefs.isWithinHours()) return
         val number = Numbers.toWhatsApp(raw, Numbers.region(ctx)) ?: return
         if (prefs.isExcluded(number)) return
+        prefs.countCall()
 
         // La scheda con "Invia" compare sempre: l'invio lo decide la persona
         Overlay.show(ctx, number)
@@ -52,6 +53,11 @@ object Core {
             b.setContentText(ctx.getString(R.string.notif_text))
                 .setStyle(NotificationCompat.BigTextStyle().bigText(prefs.message))
                 .addAction(R.drawable.ic_send, ctx.getString(R.string.notif_action), pi)
+            // Altri messaggi pronti come pulsanti (al massimo due)
+            val auto = prefs.autoIndex()
+            prefs.templates().withIndex().filter { it.index != auto }.take(2).forEach { (i, t) ->
+                b.addAction(R.drawable.ic_send, t.name, sendIntent(ctx, number, i))
+            }
         } else {
             b.setContentText(ctx.getString(R.string.notif_limit))
         }
@@ -59,12 +65,13 @@ object Core {
         NotificationManagerCompat.from(ctx).notify(number.hashCode(), b.build())
     }
 
-    fun sendIntent(ctx: Context, number: String): PendingIntent {
+    fun sendIntent(ctx: Context, number: String, template: Int? = null): PendingIntent {
         val i = Intent(ctx, SendActivity::class.java)
             .putExtra(SendActivity.EXTRA_NUMBER, number)
+        if (template != null) i.putExtra(SendActivity.EXTRA_TEMPLATE, template)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return PendingIntent.getActivity(
-            ctx, number.hashCode(), i,
+            ctx, number.hashCode() * 31 + (template ?: -1), i,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }

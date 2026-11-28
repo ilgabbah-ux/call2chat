@@ -25,7 +25,7 @@
     <string name="btn_notif_done">✓ Notifications allowed</string>
     <string name="role_unavailable">This phone does not support call screening apps</string>
 
-    <string name="msg_title">Your message</string>
+    <string name="msg_title">Your messages</string>
     <string name="send_with">Send with</string>
     <string name="wa" translatable="false">WhatsApp</string>
     <string name="wa_business" translatable="false">WA Business</string>
@@ -69,4 +69,74 @@
     <string name="xiaomi_hint">Turn on "Display pop-up windows while running in the background" and "Show on lock screen"</string>
     <string name="update_downloading">Downloading Call2Chat %1$s…</string>
     <string name="update_allow">Allow Call2Chat to install updates, then go back</string>
+
+    <string name="tpl_default_name">Standard</string>
+    <string name="tpl_meeting_name">In a meeting</string>
+    <string name="tpl_meeting_text">Hi! I\'m in a meeting and can\'t answer. I\'ll call you back around {time+1}, or write me here 👍</string>
+    <string name="tpl_ride_name">Riding</string>
+    <string name="tpl_ride_text">Hi! I\'m riding and can\'t answer 🏍️ Write me here, I\'ll reply as soon as I stop.</string>
+    <string name="tpl_closed_name">Closed</string>
+    <string name="tpl_closed_text">Hi! We\'re closed right now. Tell me here what you need and I\'ll reply {tomorrow} morning 🙂</string>
+    <string name="tpl_hint">⭐ = default message. During the call you can pick another one.</string>
+    <string name="tpl_name_hint">Name (e.g. In a meeting)</string>
+    <string name="tpl_add">+ New</string>
+    <string name="tpl_make_default">⭐ Make default</string>
+    <string name="tpl_delete">Delete</string>
+    <string name="tpl_new_name">New</string>
+    <string name="tpl_default_set">Default message set</string>
+    <string name="tpl_delete_q">Delete «%1$s»?</string>
+    <string name="vars_hint">Tap to insert: they fill in when sending</string>
+    <string name="vars_preview">Preview: %1$s</string>
+    <string name="off_title">Out-of-hours message</string>
+    <string name="off_desc">Outside working hours a different message is used automatically.</string>
+    <string name="weekend_off">Saturday and Sunday are out of hours</string>
+    <string name="off_pick">Out-of-hours message</string>
+    <string name="work_from">From %1$s</string>
+    <string name="work_to">to %1$s</string>
+    <string name="off_use">Out of hours uses: %1$s</string>
+    <string name="off_now">Right now it would send: %1$s</string>
+    <string name="stats_title">Stats · last 7 days</string>
+    <string name="stats_calls">unknown calls</string>
+    <string name="stats_sent">messages sent</string>
+    <string name="stats_all">All time: %1$d calls · %2$d messages</string>
+    <string name="pick_message">Which message?</string>
+    <string name="health_no_wa">Install WhatsApp or WhatsApp Business</string>
+    <string name="health_bad_title">Not working yet</string>
+    <string name="health_warn_title">Working, but may stop when closed</string>
+    <string name="health_missing">%1$d steps missing · tap to finish</string>
+    <string name="health_ok_title">All set</string>
+    <string name="health_ok_text">Works even when the app is closed</string>
+    <string name="setup_progress">Step %1$d of %2$d</string>
+    <string name="setup_progress_done">%1$d of %2$d steps done</string>
+    <string name="setup_done_title">All set!</string>
+    <string name="setup_done_text">Call2Chat works even when closed. When a number not in your contacts calls, the Send card appears over the call.</string>
+    <string name="setup_partial_title">Almost ready</string>
+    <string name="setup_partial_text">You skipped some steps: the app may not alert you when closed. Finish them any time by tapping the card at the top.</string>
+    <string name="setup_tip_recents">Tip: open recent apps, long-press Call2Chat and tap the lock 🔒 so it isn\'t closed.</string>
+    <string name="setup_go_app">Go to the app</string>
+    <string name="setup_skip">Skip for now</string>
+    <string name="setup_confirm">Done ✓</string>
+    <string name="step_open">Open settings</string>
+    <string name="step_role_title">Recognise calls</string>
+    <string name="step_role_text">Choose Call2Chat as «Caller ID &amp; spam app». Android will only tell it about numbers not in your contacts.\n\nIt never blocks, records or listens to calls.</string>
+    <string name="step_role_btn">Set Call2Chat</string>
+    <string name="step_notif_title">Notifications</string>
+    <string name="step_notif_text">Needed to alert you with the ready message when someone calls.</string>
+    <string name="step_notif_btn">Allow notifications</string>
+    <string name="step_overlay_title">Button during the call</string>
+    <string name="step_overlay_text">Turn on «Display over other apps» for Call2Chat: while the phone rings, the Send on WhatsApp card appears.</string>
+    <string name="step_keep_title">Don\'t pause the app</string>
+    <string name="step_keep_text">Turn off «Pause app activity if unused» (or «Remove permissions if app isn\'t used»). Otherwise Android stops it after a few weeks.</string>
+    <string name="step_battery_title">Unrestricted battery</string>
+    <string name="step_battery_text">Open «Battery» and choose «Unrestricted». This way Call2Chat alerts you even when closed.\n\nThen come back and tap Done.</string>
+    <string name="step_xiaomi_title">Xiaomi permissions</string>
+    <string name="step_xiaomi_text">Turn on:\n• Autostart\n• Display pop-up windows while running in the background\n• Show on lock screen\n\nThen come back and tap Done.</string>
+    <string name="step_samsung_title">Samsung: no sleeping</string>
+    <string name="step_samsung_text">In «Battery» choose «Unrestricted».\n\nIf Call2Chat is among «Sleeping apps» (Device care → Battery → Background usage limits), remove it.\n\nThen come back and tap Done.</string>
+    <string name="step_oppo_title">Auto launch</string>
+    <string name="step_oppo_text">Turn on «Auto launch» (or «Allow background activity») for Call2Chat.\n\nThen come back and tap Done.</string>
+    <string name="step_vivo_title">Background start</string>
+    <string name="step_vivo_text">Allow Call2Chat to auto-start and run in the background.\n\nThen come back and tap Done.</string>
+    <string name="step_huawei_title">App launch</string>
+    <string name="step_huawei_text">In «App launch» set Call2Chat to «Manage manually» and turn on all three switches.\n\nThen come back and tap Done.</string>
 </resources>
