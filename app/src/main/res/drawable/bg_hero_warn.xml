@@ -2,6 +2,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item><shape><corners android:radius="26dp" />
         <gradient android:type="radial" android:gradientRadius="360dp" android:centerX="0" android:centerY="0"
-            android:startColor="#4A2A10" android:endColor="#1A1410" /></shape></item>
-    <item><shape><corners android:radius="26dp" /><stroke android:width="1dp" android:color="#4A3418" /></shape></item>
+            android:startColor="@color/warn_start" android:endColor="@color/warn_end" /></shape></item>
+    <item><shape><corners android:radius="26dp" /><stroke android:width="1dp" android:color="@color/warn_stroke" /></shape></item>
 </layer-list>

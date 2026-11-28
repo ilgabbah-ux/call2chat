@@ -173,4 +173,8 @@
     <plurals name="att_photos">
         <item quantity="other">%1$d 张照片</item>
     </plurals>
+    <string name="theme_title">主题</string>
+    <string name="theme_dark">深色</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_auto">自动</string>
 </resources>

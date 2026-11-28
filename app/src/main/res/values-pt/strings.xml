@@ -174,4 +174,8 @@
         <item quantity="one">%1$d foto</item>
         <item quantity="other">%1$d fotos</item>
     </plurals>
+    <string name="theme_title">Tema</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_auto">Auto</string>
 </resources>

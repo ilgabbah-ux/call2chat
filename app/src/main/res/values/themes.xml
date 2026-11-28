@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Palette scura premium -->
-    <color name="bg">#0A0F0D</color>
-    <color name="surface">#111814</color>
-    <color name="surface2">#16211C</color>
-    <color name="stroke">#1F2C26</color>
-    <color name="text">#E8F0EC</color>
-    <color name="text2">#B7C8C0</color>
-    <color name="text3">#93A8A0</color>
-    <color name="brand">#19C37D</color>
-    <color name="on_brand">#062A1B</color>
-    <color name="mint">#7FE3B4</color>
-    <color name="yellow">#FFC531</color>
-    <color name="on_yellow">#2A1E00</color>
-    <color name="bubble">#005C4B</color>
-    <color name="wa_green">#25D366</color>
-    <color name="danger">#FF6B6B</color>
-    <color name="warn">#FFB020</color>
-    <color name="icon_bg">#0E9A62</color>
-    <color name="brand_dark">#0A5E4B</color>
-    <color name="accent">#FFC531</color>
-
-    <style name="Theme.Call2Chat" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Theme.Call2Chat" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/brand</item>
         <item name="colorOnPrimary">@color/on_brand</item>
         <item name="colorPrimaryContainer">@color/surface2</item>
@@ -36,12 +15,13 @@
         <item name="colorSurfaceContainerHighest">@color/surface2</item>
         <item name="colorSurfaceContainerHigh">@color/surface2</item>
         <item name="colorSurfaceContainer">@color/surface</item>
-        <item name="colorOutline">#36493F</item>
+        <item name="colorOutline">@color/outline_variant</item>
         <item name="colorOutlineVariant">@color/stroke</item>
         <item name="android:colorBackground">@color/bg</item>
         <item name="android:statusBarColor">@color/bg</item>
         <item name="android:navigationBarColor">@color/bg</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
         <item name="android:fontFamily">@font/inter</item>
         <item name="fontFamily">@font/inter</item>
         <item name="materialAlertDialogTheme">@style/Dialog.Call2Chat</item>
@@ -113,7 +93,7 @@
     <style name="Btn.Outlined" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:minHeight">48dp</item>
         <item name="cornerRadius">14dp</item>
-        <item name="strokeColor">#2B3D35</item>
+        <item name="strokeColor">@color/outline</item>
         <item name="android:textColor">@color/text</item>
     </style>
     <style name="Btn.Text" parent="Widget.Material3.Button.TextButton">

@@ -181,4 +181,8 @@
         <item>{domani}</item>
         <item>{data}</item>
     </string-array>
+    <string name="theme_title">Tema</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="theme_auto">Auto</string>
 </resources>

@@ -204,7 +204,7 @@ class SetupActivity : AppCompatActivity() {
             top.addView(sw)
             row.addView(top)
             val ch = TextView(this).apply {
-                textSize = 14f; setTextColor(color(R.color.brand)); setPadding(0, dp(6), 0, dp(2))
+                textSize = 14f; setTextColor(color(R.color.brand_text)); setPadding(0, dp(6), 0, dp(2))
                 minHeight = dp(36); gravity = Gravity.CENTER_VERTICAL
                 isClickable = true
             }
@@ -231,7 +231,7 @@ class SetupActivity : AppCompatActivity() {
                 cornerRadius = dp(16)
                 textSize = 15f
                 setTextColor(color(R.color.text))
-                strokeColor = ColorStateList.valueOf(0xFF2B3D35.toInt())
+                strokeColor = ColorStateList.valueOf(color(R.color.outline))
                 setOnClickListener {
                     prefs.channel = c
                     prefs.setConfirmed(Step.CHANNEL.name, true)

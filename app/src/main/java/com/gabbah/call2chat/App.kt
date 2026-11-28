@@ -7,6 +7,7 @@ import android.app.NotificationManager
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        Themes.apply(this)
         val ch = NotificationChannel(
             CHANNEL_CALLS,
             getString(R.string.channel_name),

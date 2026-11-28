@@ -146,6 +146,14 @@ class MainActivity : AppCompatActivity() {
         b.healthAction.setOnClickListener { openSetup() }
         b.btnSetup.setOnClickListener { openSetup() }
 
+        // Tema
+        b.themeGroup.check(when (prefs.theme) { "light" -> R.id.themeLight; "auto" -> R.id.themeAuto; else -> R.id.themeDark })
+        b.themeGroup.addOnButtonCheckedListener { _, id, checked ->
+            if (!checked) return@addOnButtonCheckedListener
+            val t = when (id) { R.id.themeLight -> "light"; R.id.themeAuto -> "auto"; else -> "dark" }
+            if (t != prefs.theme) { prefs.theme = t; Themes.apply(this) }
+        }
+
         // Messaggi pronti
         b.message.doAfterTextChanged { t ->
             if (loading) return@doAfterTextChanged
@@ -281,7 +289,7 @@ class MainActivity : AppCompatActivity() {
         setPadding(dp(16), 0, dp(16), 0)
         background = GradientDrawable().apply {
             cornerRadius = dp(20).toFloat()
-            if (selected) setColor(color(R.color.yellow)) else { setColor(0); setStroke(dp(1), 0xFF2B3D35.toInt()) }
+            if (selected) setColor(color(R.color.yellow)) else { setColor(0); setStroke(dp(1), color(R.color.outline)) }
         }
         isClickable = true
         setOnClickListener { onClick() }
@@ -301,7 +309,7 @@ class MainActivity : AppCompatActivity() {
             editing = prefs.templates().size - 1
             buildTemplatePills(); loadEditing()
             b.message.requestFocus()
-        }.apply { setTextColor(color(R.color.brand)) }, LinearLayout.LayoutParams(-2, dp(40)))
+        }.apply { setTextColor(color(R.color.brand_text)) }, LinearLayout.LayoutParams(-2, dp(40)))
     }
 
     private fun loadEditing() {
@@ -509,7 +517,7 @@ class MainActivity : AppCompatActivity() {
             fun bar(n: Int, c: Int) = View(this).apply { background = round(c, 4) }.also {
                 bars.addView(it, LinearLayout.LayoutParams(dp(9), (h * n / max).coerceAtLeast(dp(4))).apply { marginStart = dp(1); marginEnd = dp(1) })
             }
-            bar(d.calls, 0xFF2C3D35.toInt())
+            bar(d.calls, color(R.color.bar_calls))
             bar(d.sent, color(R.color.brand))
             col.addView(bars, LinearLayout.LayoutParams(-1, h))
             col.addView(TextView(this).apply {
@@ -541,9 +549,9 @@ class MainActivity : AppCompatActivity() {
                 text = e.number.takeLast(2)
                 gravity = Gravity.CENTER
                 typeface = ResourcesCompat.getFont(this@MainActivity, R.font.grotesk)
-                setTextColor(color(R.color.mint))
+                setTextColor(color(R.color.avatar_text))
                 textSize = 14f
-                background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(0xFF1E3329.toInt()) }
+                background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(color(R.color.avatar_bg)) }
             }, LinearLayout.LayoutParams(dp(40), dp(40)))
             row.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
@@ -560,8 +568,8 @@ class MainActivity : AppCompatActivity() {
             row.addView(MaterialButton(this, null, com.google.android.material.R.attr.materialButtonOutlinedStyle).apply {
                 setText(R.string.history_send)
                 cornerRadius = dp(14)
-                strokeColor = ColorStateList.valueOf(0xFF2B3D35.toInt())
-                setTextColor(color(R.color.brand))
+                strokeColor = ColorStateList.valueOf(color(R.color.outline))
+                setTextColor(color(R.color.brand_text))
                 setOnClickListener { pickAndSend(e.number) }
             })
             list.addView(row)

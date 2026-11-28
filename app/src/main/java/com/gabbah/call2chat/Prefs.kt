@@ -166,6 +166,11 @@ class Prefs(ctx: Context) {
     /** Canale per la chiamata arrivata su quella SIM (o quello generale) */
     fun channelFor(sim: Int?): Channel = sim?.takeIf { it >= 0 }?.let { simChannel(it) } ?: channel
 
+    /** Tema: "dark" (predefinito), "light", "auto" (come il telefono) */
+    var theme: String
+        get() = p.getString("theme", "dark") ?: "dark"
+        set(v) = p.edit().putString("theme", v).apply()
+
     var lastTab: Int
         get() = p.getInt("tab", 0)
         set(v) = p.edit().putInt("tab", v).apply()

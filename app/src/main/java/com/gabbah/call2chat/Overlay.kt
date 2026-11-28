@@ -37,6 +37,13 @@ object Overlay {
         main.post { showNow(ctx.applicationContext, number, sim) }
     }
 
+    /** Colori secondo il tema scelto nell'app */
+    private fun themed(ctx: Context): Context = Themes.context(ctx).let {
+        object : android.content.ContextWrapper(it) {
+            override fun getApplicationContext(): Context = ctx.applicationContext
+        }
+    }
+
     fun hide() = main.post { removeNow() }
 
     private fun removeNow() {
@@ -46,9 +53,10 @@ object Overlay {
         view = null
     }
 
-    private fun showNow(ctx: Context, number: String, sim: Int) {
+    private fun showNow(appCtx: Context, number: String, sim: Int) {
         removeNow()
-        val wm = ctx.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val wm = appCtx.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val ctx = themed(appCtx)
         fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), ctx.resources.displayMetrics).toInt()
         fun col(id: Int) = ContextCompat.getColor(ctx, id)
         fun round(c: Int, r: Int) = GradientDrawable().apply { setColor(c); cornerRadius = dp(r).toFloat() }
@@ -61,7 +69,7 @@ object Overlay {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(16), dp(16), dp(16), dp(16))
             background = GradientDrawable().apply {
-                setColor(0xF20C1411.toInt()); cornerRadius = dp(28).toFloat(); setStroke(dp(1), 0xFF23362D.toInt())
+                setColor(col(R.color.overlay_bg)); cornerRadius = dp(28).toFloat(); setStroke(dp(1), col(R.color.overlay_stroke))
             }
             elevation = dp(12).toFloat()
         }
@@ -73,8 +81,8 @@ object Overlay {
             gravity = Gravity.CENTER
             setTypeface(grotesk, Typeface.BOLD)
             textSize = 16f
-            setTextColor(0xFF9FE8C4.toInt())
-            background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(0xFF1E3329.toInt()) }
+            setTextColor(col(R.color.avatar_text))
+            background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(col(R.color.avatar_bg)) }
         }, LinearLayout.LayoutParams(dp(46), dp(46)))
         val who = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(12), 0, dp(8), 0) }
         who.addView(TextView(ctx).apply {
@@ -92,7 +100,7 @@ object Overlay {
             setImageResource(R.drawable.ic_close)
             setColorFilter(col(R.color.text3))
             setPadding(dp(13), dp(13), dp(13), dp(13))
-            background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(0x10FFFFFF) }
+            background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(col(R.color.close_bg)) }
             contentDescription = ctx.getString(R.string.overlay_close)
             isClickable = true
             setOnClickListener { hide() }
@@ -109,7 +117,7 @@ object Overlay {
             val templates = prefs.templates()
             var selected = prefs.autoIndex()
             val preview = TextView(ctx).apply {
-                typeface = inter; textSize = 14f; setTextColor(0xFFE9FDF5.toInt())
+                typeface = inter; textSize = 14f; setTextColor(col(R.color.bubble_text))
                 setLineSpacing(0f, 1.15f); maxLines = 4; ellipsize = TextUtils.TruncateAt.END
                 setPadding(dp(12), dp(10), dp(12), dp(10))
                 background = GradientDrawable().apply {
@@ -127,7 +135,7 @@ object Overlay {
                     c.setTextColor(if (on) col(R.color.on_yellow) else col(R.color.text2))
                     c.background = GradientDrawable().apply {
                         cornerRadius = dp(17).toFloat()
-                        if (on) setColor(col(R.color.yellow)) else { setColor(0); setStroke(dp(1), 0xFF2B3D35.toInt()) }
+                        if (on) setColor(col(R.color.yellow)) else { setColor(0); setStroke(dp(1), col(R.color.outline)) }
                     }
                 }
             }
@@ -156,7 +164,7 @@ object Overlay {
             card.addView(Button(ctx).apply {
                 text = ctx.getString(channel.sendLabel)
                 setTypeface(inter, Typeface.BOLD); textSize = 16f; isAllCaps = false
-                setTextColor(0xFF052E1C.toInt())
+                setTextColor(col(R.color.on_wa))
                 background = round(col(R.color.wa_green), 18)
                 stateListAnimator = null
                 setOnClickListener {

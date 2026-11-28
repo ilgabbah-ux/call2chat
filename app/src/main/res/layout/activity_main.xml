@@ -167,7 +167,7 @@
                         style="@style/BigNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/yellow_text"
                         android:textSize="20sp" />
 
                     <TextView
@@ -245,7 +245,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:lineSpacingMultiplier="1.15"
-                            android:textColor="#E9FDF5"
+                            android:textColor="@color/bubble_text"
                             android:textSize="14.5sp" />
 
                         <TextView
@@ -253,7 +253,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:textColor="#9FD8C6"
+                            android:textColor="@color/bubble_meta"
                             android:textSize="11sp" />
                     </LinearLayout>
 
@@ -641,7 +641,7 @@
                     android:layout_height="wrap_content"
                     android:letterSpacing="0.04"
                     android:text="@string/stats_rate_label"
-                    android:textColor="#CDBF92"
+                    android:textColor="@color/gold_label"
                     android:textSize="12sp" />
 
                 <LinearLayout
@@ -655,7 +655,7 @@
                         style="@style/BigNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/yellow_text"
                         android:textSize="52sp" />
 
                     <TextView
@@ -676,7 +676,7 @@
                     android:layout_marginTop="8dp"
                     android:max="100"
                     app:indicatorColor="@color/yellow"
-                    app:trackColor="#14FFFFFF"
+                    app:trackColor="@color/track"
                     app:trackCornerRadius="5dp"
                     app:trackThickness="10dp"
                     app:trackStopIndicatorSize="0dp" />
@@ -686,7 +686,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColor="#A9A38C"
+                    android:textColor="@color/gold_sub"
                     android:textSize="13sp" />
             </LinearLayout>
 
@@ -797,7 +797,7 @@
                         <View
                             android:layout_width="8dp"
                             android:layout_height="8dp"
-                            android:background="#2C3D35" />
+                            android:background="@color/bar_calls" />
 
                         <TextView
                             style="@style/Label"
@@ -1003,7 +1003,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="10dp"
                         android:max="100"
-                        app:trackColor="#14FFFFFF"
+                        app:trackColor="@color/track"
                         app:trackCornerRadius="4dp"
                         app:trackThickness="8dp"
                         app:trackStopIndicatorSize="0dp" />
@@ -1015,6 +1015,57 @@
                         android:layout_height="wrap_content"
                         app:backgroundTint="@color/yellow"
                         android:textColor="@color/on_yellow" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/CardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/theme_title" />
+
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/themeGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/themeDark"
+                            style="@style/Btn.Outlined"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/theme_dark" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/themeLight"
+                            style="@style/Btn.Outlined"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/theme_light" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/themeAuto"
+                            style="@style/Btn.Outlined"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/theme_auto" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
