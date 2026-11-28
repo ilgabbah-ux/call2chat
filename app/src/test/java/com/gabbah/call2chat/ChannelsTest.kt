@@ -43,13 +43,22 @@ class ChannelsTest {
         app.getSharedPreferences("call2chat", 0).edit().putString("attachments",
             """[{"k":"photo","f":"photo_1.jpg","n":"a.jpg"},{"k":"pdf","f":"pdf_1.pdf","n":"Catalogo.pdf"}]""").apply()
         assertEquals("1 foto · PDF", Attachments.summary(app))
-        Channel.open(app, Channel.WHATSAPP, "393331234567", "Ciao")
-        val i = shadowOf(app).nextStartedActivity
-        assertEquals(Intent.ACTION_SEND_MULTIPLE, i.action)
-        assertEquals("com.whatsapp", i.`package`)
-        assertEquals("393331234567@s.whatsapp.net", i.getStringExtra("jid"))
-        assertEquals("Ciao", i.getStringExtra(Intent.EXTRA_TEXT))
-        assertEquals(2, i.getParcelableArrayListExtra<android.net.Uri>(Intent.EXTRA_STREAM)!!.size)
+        val steps = Channel.plan(app, Channel.WHATSAPP, "393331234567", "Ciao")
+        assertEquals(2, steps.size)
+        // 1) foto con didascalia, direttamente nella chat del numero
+        val a = steps[0]
+        assertEquals(Intent.ACTION_SEND, a.action)
+        assertEquals("image/*", a.type)
+        assertEquals("com.whatsapp", a.`package`)
+        assertEquals("393331234567@s.whatsapp.net", a.getStringExtra("jid"))
+        assertEquals("Ciao", a.getStringExtra(Intent.EXTRA_TEXT))
+        // 2) il PDF da solo, stessa chat
+        val b = steps[1]
+        assertEquals("application/pdf", b.type)
+        assertEquals("393331234567@s.whatsapp.net", b.getStringExtra("jid"))
+        assertEquals(null, b.getStringExtra(Intent.EXTRA_TEXT))
+        // l'anteprima include gli allegati
+        assertEquals(Intent.EXTRA_STREAM in Channel.plan(app, Channel.WHATSAPP, null, "Ciao")[0].extras!!.keySet(), true)
     }
 
     @Test fun perSimChannelAndSwitch() {

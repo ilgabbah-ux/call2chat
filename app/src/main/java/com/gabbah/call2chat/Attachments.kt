@@ -71,7 +71,7 @@ object Attachments {
 
     fun file(ctx: Context, item: Item) = File(dir(ctx), item.file)
 
-    fun uris(ctx: Context): ArrayList<Uri> = ArrayList(list(ctx).map {
+    fun uris(ctx: Context, vararg kinds: Kind): ArrayList<Uri> = ArrayList(list(ctx).filter { kinds.isEmpty() || it.kind in kinds }.map {
         FileProvider.getUriForFile(ctx, ctx.packageName + ".files", file(ctx, it))
     })
 

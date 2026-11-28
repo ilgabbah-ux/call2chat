@@ -19,8 +19,8 @@ android {
         applicationId = "com.gabbah.call2chat"
         minSdk = 29
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.8"
+        versionCode = 10
+        versionName = "1.8.1"
     }
 
     signingConfigs {
@@ -79,4 +79,4 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.16")
     testImplementation("androidx.test:core:1.7.0")
 }
-tasks.withType<Test>().configureEach { systemProperty("robolectric.offline", "true"); systemProperty("robolectric.dependency.dir", "/root/robolectric-jars") }
+tasks.withType<Test>().configureEach { setForkEvery(1); systemProperty("robolectric.offline", "true"); systemProperty("robolectric.dependency.dir", "/root/robolectric-jars") }

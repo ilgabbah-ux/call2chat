@@ -32,54 +32,27 @@ enum class Channel(val id: String, val pkg: String?, val label: Int, val sendLab
             else -> SMS
         }
 
-        /** Apre il canale con il messaggio pronto. True se è riuscito. */
-        fun open(ctx: Context, chosen: Channel, number: String, text: String, noFiles: Boolean = false): Boolean {
+        /**
+         * I passaggi per inviare: uno o più Intent da aprire uno dopo l'altro.
+         * number = null → anteprima senza destinatario.
+         *
+         * WhatsApp con allegati: si apre direttamente la chat del numero (parametro "jid", non ufficiale
+         * ma usato da molte app business). Foto e video partono insieme con il testo come didascalia;
+         * il PDF parte in un secondo passaggio, perché WhatsApp scarta i documenti mescolati alle foto.
+         */
+        fun plan(ctx: Context, chosen: Channel, number: String?, text: String): List<Intent> {
             val c = resolve(ctx, chosen)
             val enc = URLEncoder.encode(text, "UTF-8")
-            fun start(i: Intent): Boolean = try {
-                ctx.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); true
-            } catch (e: ActivityNotFoundException) { false } catch (e: SecurityException) { false }
+            val media = Attachments.uris(ctx, Attachments.Kind.PHOTO, Attachments.Kind.VIDEO)
+            val docs = Attachments.uris(ctx, Attachments.Kind.PDF)
+            val all = ArrayList(media + docs)
+            val jid = number?.let { "$it@s.whatsapp.net" }
 
-            val files = Attachments.uris(ctx)
-            if (!noFiles && files.isNotEmpty()) return openWithFiles(ctx, c, number, text, files, ::start)
-
-            return when (c) {
-                WHATSAPP, WA_BUSINESS -> {
-                    val uri = Uri.parse("https://api.whatsapp.com/send?phone=$number&text=$enc")
-                    val other = if (c == WHATSAPP) WA_BUSINESS else WHATSAPP
-                    listOf(c, other).filter { isInstalled(ctx, it) }
-                        .any { start(Intent(Intent.ACTION_VIEW, uri).setPackage(it.pkg)) } ||
-                        start(Intent(Intent.ACTION_VIEW, uri))
-                }
-                SMS -> start(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:+$number")).putExtra("sms_body", text))
-                TELEGRAM -> {
-                    // Telegram non apre una chat da numero con testo: si condivide e si sceglie la chat
-                    start(Intent(Intent.ACTION_VIEW, Uri.parse("tg://msg?text=$enc")).setPackage(c.pkg)) ||
-                        start(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text).setPackage(c.pkg))
-                }
-                WECHAT -> {
-                    // WeChat non permette di pre-scrivere: copio il testo e apro l'app
-                    copy(ctx, text)
-                    Toast.makeText(ctx, ctx.getString(R.string.wechat_copied, Numbers.pretty(number)), Toast.LENGTH_LONG).show()
-                    val launch = ctx.packageManager.getLaunchIntentForPackage(c.pkg!!)
-                    launch != null && start(launch)
-                }
-                AUTO -> false
-            }
-        }
-
-        /**
-         * Con allegati. WhatsApp: apre direttamente la chat del numero (parametro "jid", non ufficiale
-         * ma usato da molte app business) con foto/video/PDF e il testo come didascalia.
-         * Se non riesce, apre la chat col testo e poi la condivisione degli allegati.
-         */
-        private fun openWithFiles(ctx: Context, c: Channel, number: String, text: String,
-                                  files: ArrayList<Uri>, start: (Intent) -> Boolean): Boolean {
-            fun share(pkg: String?, extra: (Intent) -> Unit = {}): Intent {
+            fun share(files: ArrayList<Uri>, type: String, caption: String?, pkg: String?, extra: (Intent) -> Unit = {}): Intent {
                 val i = if (files.size == 1) Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_STREAM, files[0])
                 else Intent(Intent.ACTION_SEND_MULTIPLE).putParcelableArrayListExtra(Intent.EXTRA_STREAM, files)
-                i.type = "*/*"
-                i.putExtra(Intent.EXTRA_TEXT, text)
+                i.type = type
+                if (caption != null) i.putExtra(Intent.EXTRA_TEXT, caption)
                 if (pkg != null) i.setPackage(pkg)
                 val clip = ClipData.newRawUri("", files[0])
                 files.drop(1).forEach { clip.addItem(ClipData.Item(it)) }
@@ -88,33 +61,67 @@ enum class Channel(val id: String, val pkg: String?, val label: Int, val sendLab
                 extra(i)
                 return i
             }
+            fun mediaType() = when {
+                media.isEmpty() -> "*/*"
+                Attachments.count(ctx, Attachments.Kind.VIDEO) == 0 -> "image/*"
+                Attachments.count(ctx, Attachments.Kind.PHOTO) == 0 -> "video/*"
+                else -> "*/*"
+            }
+
             return when (c) {
                 WHATSAPP, WA_BUSINESS -> {
-                    start(share(c.pkg) { it.putExtra("jid", "$number@s.whatsapp.net") }) || run {
-                        val ok = open(ctx, c, number, text, noFiles = true)
-                        start(Intent.createChooser(share(c.pkg), null)); ok
+                    if (all.isEmpty()) {
+                        if (number == null) listOf(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text).setPackage(c.pkg))
+                        else listOf(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$number&text=$enc")).setPackage(c.pkg))
+                    } else buildList {
+                        if (media.isNotEmpty()) add(share(media, mediaType(), text, c.pkg) { if (jid != null) it.putExtra("jid", jid) })
+                        if (docs.isNotEmpty()) add(share(docs, "application/pdf", if (media.isEmpty()) text else null, c.pkg) { if (jid != null) it.putExtra("jid", jid) })
                     }
                 }
-                SMS -> start(share(null) { it.putExtra("address", "+$number").putExtra("sms_body", text) }) ||
-                    open(ctx, SMS, number, text, noFiles = true)
-                WECHAT -> {
-                    copy(ctx, text)
-                    Toast.makeText(ctx, ctx.getString(R.string.wechat_copied, Numbers.pretty(number)), Toast.LENGTH_LONG).show()
-                    start(share(c.pkg))
+                SMS -> {
+                    if (media.isEmpty()) listOf(Intent(Intent.ACTION_SENDTO, Uri.parse(if (number != null) "smsto:+$number" else "smsto:")).putExtra("sms_body", text))
+                    else listOf(share(media, mediaType(), text, null) {
+                        it.putExtra("sms_body", text); if (number != null) it.putExtra("address", "+$number")
+                    })
                 }
-                else -> start(share(c.pkg))
+                TELEGRAM -> {
+                    // Telegram non apre una chat da numero: si condivide e si sceglie la chat
+                    if (all.isEmpty()) listOf(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text).setPackage(c.pkg))
+                    else listOf(share(all, "*/*", text, c.pkg))
+                }
+                WECHAT -> {
+                    // WeChat non permette di pre-scrivere: copio il testo e apro l'app (o la condivisione dei file)
+                    copy(ctx, text)
+                    if (number != null) Toast.makeText(ctx, ctx.getString(R.string.wechat_copied, Numbers.pretty(number)), Toast.LENGTH_LONG).show()
+                    if (all.isEmpty()) listOfNotNull(ctx.packageManager.getLaunchIntentForPackage(c.pkg!!))
+                    else listOf(share(all, "*/*", null, c.pkg))
+                }
+                AUTO -> emptyList()
             }
         }
 
-        /** Anteprima senza destinatario, per vedere il testo nell'app scelta */
-        fun preview(ctx: Context, chosen: Channel, text: String): Boolean {
+        /** Apre il primo passaggio (usato dove non serve la sequenza). True se è riuscito. */
+        fun open(ctx: Context, chosen: Channel, number: String, text: String): Boolean =
+            plan(ctx, chosen, number, text).firstOrNull()?.let { start(ctx, it) } ?: false
+
+        /** Anteprima senza destinatario, allegati compresi */
+        fun preview(ctx: Context, chosen: Channel, text: String): Boolean =
+            plan(ctx, chosen, null, text).firstOrNull()?.let { start(ctx, it) } ?: false
+
+        fun start(ctx: Context, i: Intent, newTask: Boolean = true): Boolean = try {
+            if (newTask) i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ctx.startActivity(i); true
+        } catch (e: ActivityNotFoundException) { false } catch (e: SecurityException) { false }
+
+        /** Solo testo, quando l'invio con allegati non parte */
+        fun textOnly(ctx: Context, chosen: Channel, number: String, text: String): Intent? {
             val c = resolve(ctx, chosen)
-            val i = when (c) {
-                SMS -> Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:")).putExtra("sms_body", text)
-                WECHAT -> { copy(ctx, text); ctx.packageManager.getLaunchIntentForPackage(c.pkg!!) ?: return false }
-                else -> Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text).setPackage(c.pkg)
+            val enc = URLEncoder.encode(text, "UTF-8")
+            return when (c) {
+                WHATSAPP, WA_BUSINESS -> Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$number&text=$enc")).setPackage(c.pkg)
+                SMS -> Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:+$number")).putExtra("sms_body", text)
+                else -> null
             }
-            return try { ctx.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); true } catch (e: Exception) { false }
         }
 
         private fun copy(ctx: Context, text: String) {
