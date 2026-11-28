@@ -185,4 +185,5 @@
     <string name="theme_dark">Scuro</string>
     <string name="theme_light">Chiaro</string>
     <string name="theme_auto">Auto</string>
+    <string name="att_failed">Allegati: la chat diretta non si è aperta (%1$s)</string>
 </resources>

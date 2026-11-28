@@ -178,4 +178,5 @@
     <string name="theme_dark">Sombre</string>
     <string name="theme_light">Clair</string>
     <string name="theme_auto">Auto</string>
+    <string name="att_failed">Pièces jointes : la discussion directe ne s\'est pas ouverte (%1$s)</string>
 </resources>

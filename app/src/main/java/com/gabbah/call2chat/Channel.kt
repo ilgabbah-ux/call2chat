@@ -74,8 +74,17 @@ enum class Channel(val id: String, val pkg: String?, val label: Int, val sendLab
                         if (number == null) listOf(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text).setPackage(c.pkg))
                         else listOf(Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$number&text=$enc")).setPackage(c.pkg))
                     } else buildList {
-                        if (media.isNotEmpty()) add(share(media, mediaType(), text, c.pkg) { if (jid != null) it.putExtra("jid", jid) })
-                        if (docs.isNotEmpty()) add(share(docs, "application/pdf", if (media.isEmpty()) text else null, c.pkg) { if (jid != null) it.putExtra("jid", jid) })
+                        // Un passaggio per tipo: WhatsApp accetta meglio foto, video e PDF separati.
+                        // Il testo va come didascalia del primo.
+                        var caption: String? = text
+                        listOf(Attachments.Kind.PHOTO to "image/*", Attachments.Kind.VIDEO to "video/*", Attachments.Kind.PDF to "application/pdf")
+                            .forEach { (k, type) ->
+                                val f = Attachments.uris(ctx, k)
+                                if (f.isNotEmpty()) {
+                                    add(share(f, type, caption, c.pkg) { if (jid != null) it.putExtra("jid", jid) })
+                                    caption = null
+                                }
+                            }
                     }
                 }
                 SMS -> {
@@ -108,10 +117,17 @@ enum class Channel(val id: String, val pkg: String?, val label: Int, val sendLab
         fun preview(ctx: Context, chosen: Channel, text: String): Boolean =
             plan(ctx, chosen, null, text).firstOrNull()?.let { start(ctx, it) } ?: false
 
-        fun start(ctx: Context, i: Intent, newTask: Boolean = true): Boolean = try {
+        fun start(ctx: Context, i: Intent, newTask: Boolean = true): Boolean = tryStart(ctx, i, newTask) == null
+
+        /** Apre l'Intent; null se è partito, altrimenti il motivo dell'errore */
+        fun tryStart(ctx: Context, i: Intent, newTask: Boolean = true): String? = try {
             if (newTask) i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            ctx.startActivity(i); true
-        } catch (e: ActivityNotFoundException) { false } catch (e: SecurityException) { false }
+            ctx.startActivity(i); null
+        } catch (e: Exception) { e.javaClass.simpleName + (e.message?.let { ": " + it.take(120) } ?: "") }
+
+        /** Stesso invio ma con la scelta del contatto (se la chat diretta non si apre) */
+        fun chooser(i: Intent): Intent = Intent.createChooser(Intent(i).apply { removeExtra("jid") }, null)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         /** Solo testo, quando l'invio con allegati non parte */
         fun textOnly(ctx: Context, chosen: Channel, number: String, text: String): Intent? {

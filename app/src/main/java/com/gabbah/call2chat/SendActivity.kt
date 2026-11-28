@@ -41,9 +41,9 @@ class SendActivity : Activity() {
         val text = prefs.messageFor(idx)
         steps = ArrayList(Channel.plan(this, channel, number, text))
 
-        // Primo passaggio; se non parte (es. app che non accetta i file) ripiego sul solo testo
-        val first = steps.removeFirstOrNull()
-        val ok = first != null && Channel.start(this, first, newTask = false) ||
+        // Primo passaggio. Se la chat diretta non si apre: scelta del contatto con gli allegati;
+        // solo come ultima spiaggia il testo da solo. L'errore viene mostrato per capire il motivo.
+        val ok = runNext(first = true) ||
             Channel.textOnly(this, channel, number, text)?.let { steps.clear(); Channel.start(this, it, newTask = false) } == true
 
         if (ok) {
@@ -69,8 +69,17 @@ class SendActivity : Activity() {
         // Tornati dal passaggio precedente: parte il successivo (es. il PDF)
         if (!launched || !away) return
         away = false
-        val next = steps.removeFirstOrNull()
-        if (next == null || !Channel.start(this, next, newTask = false)) finish()
+        if (!runNext(first = false)) finish()
+    }
+
+    private fun runNext(first: Boolean): Boolean {
+        val next = steps.removeFirstOrNull() ?: return false
+        val err = Channel.tryStart(this, next, newTask = false) ?: return true
+        if (next.hasExtra(Intent.EXTRA_STREAM)) {
+            Toast.makeText(this, getString(R.string.att_failed, err), Toast.LENGTH_LONG).show()
+            if (Channel.start(this, Channel.chooser(next), newTask = false)) return true
+        }
+        return if (first) false else runNext(false)
     }
 
     companion object {

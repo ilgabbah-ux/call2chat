@@ -30,12 +30,16 @@ class SendFlowTest {
         val i = Intent(app, SendActivity::class.java).putExtra(SendActivity.EXTRA_NUMBER, "393331234567")
         val c = Robolectric.buildActivity(SendActivity::class.java, i).create().start().resume()
         val first = shadowOf(c.get()).nextStartedActivity
-        assertEquals(Intent.ACTION_SEND_MULTIPLE, first.action)
+        assertEquals("image/*", first.type)
         assertEquals("com.whatsapp.w4b", first.`package`)
-        assertNull(shadowOf(c.get()).nextStartedActivity)          // il PDF aspetta
+        assertEquals("393331234567@s.whatsapp.net", first.getStringExtra("jid"))
+        assertNull(shadowOf(c.get()).nextStartedActivity)          // il video aspetta
         c.pause().stop().restart().start().resume()                 // torno da WhatsApp
-        val second = shadowOf(c.get()).nextStartedActivity
-        assertEquals("application/pdf", second.type)
+        assertEquals("video/*", shadowOf(c.get()).nextStartedActivity.type)
+        assertNull(shadowOf(c.get()).nextStartedActivity)
+        c.pause().stop().restart().start().resume()
+        val third = shadowOf(c.get()).nextStartedActivity
+        assertEquals("application/pdf", third.type)
         c.pause().stop().restart().start().resume()
         assertTrue(c.get().isFinishing)
         assertEquals(1, Prefs(app).sentCount)

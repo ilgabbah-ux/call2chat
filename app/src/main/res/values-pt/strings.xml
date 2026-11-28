@@ -178,4 +178,5 @@
     <string name="theme_dark">Escuro</string>
     <string name="theme_light">Claro</string>
     <string name="theme_auto">Auto</string>
+    <string name="att_failed">Anexos: a conversa direta não abriu (%1$s)</string>
 </resources>

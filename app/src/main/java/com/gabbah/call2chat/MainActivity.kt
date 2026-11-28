@@ -181,7 +181,9 @@ class MainActivity : AppCompatActivity() {
                 setTextColor(color(R.color.text2))
                 setOnClickListener {
                     val e = b.message
-                    e.text?.insert(e.selectionStart.coerceAtLeast(0), v)
+                    val t = e.text ?: return@setOnClickListener
+                    if (e.hasFocus() && e.selectionStart >= 0) t.insert(e.selectionStart, v)
+                    else { t.append(if (t.isNotEmpty() && !t.endsWith(" ")) " $v" else v); e.setSelection(t.length) }
                 }
             })
         }
