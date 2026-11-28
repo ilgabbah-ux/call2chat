@@ -21,7 +21,7 @@ Call2Chat is developed by Gabbah Productions (Italy).
 
 **Deleting your data.** Uninstall the app, or clear its storage from Android Settings → Apps → Call2Chat → Storage.
 
-**Contact.** [EMAIL DA INSERIRE]
+**Contact.** ilgabbah@gmail.com
 
 ## Italiano
 
@@ -42,4 +42,4 @@ Call2Chat è sviluppata da Gabbah Productions (Italia).
 
 **Cancellare i dati.** Disinstalla l'app, oppure cancella i suoi dati da Impostazioni di Android → App → Call2Chat → Memoria.
 
-**Contatti.** [EMAIL DA INSERIRE]
+**Contatti.** ilgabbah@gmail.com
