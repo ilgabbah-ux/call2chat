@@ -21,6 +21,7 @@ class OverlayTest {
     @Test fun sendButtonAppearsDuringCallAndOpensWhatsApp() {
         val app = ApplicationProvider.getApplicationContext<Application>()
         ShadowSettings.setCanDrawOverlays(true)
+        shadowOf(app.packageManager).installPackage(android.content.pm.PackageInfo().apply { packageName = "com.whatsapp" })
         Core.onUnknownCall(app, "+393421112233")
         shadowOf(Looper.getMainLooper()).idle()
         val wm = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager

@@ -1,6 +1,6 @@
 # Call2Chat – Privacy Policy / Informativa privacy
 
-Last updated / Ultimo aggiornamento: 27 November 2026
+Last updated / Ultimo aggiornamento: 28 November 2026
 
 ## English
 
@@ -12,6 +12,8 @@ Call2Chat is developed by Gabbah Productions (Italy).
 - The phone number of incoming calls from numbers not in your contacts, provided by Android.
 - Your message text and your settings.
 - A list of the last 30 unknown numbers that called you, with date and time, so you can send the message later.
+- On dual-SIM phones, which SIM received the call (to reply with the app you chose for that number). This needs the "Phone" permission and is used only for this.
+- The photos, video and PDF you choose as attachments: they are copied inside the app and sent only when you tap Send.
 
 **Where the data is stored.** Only on your phone. Call2Chat has no server, has no account, does not upload, sell or share any data, and contains no advertising or analytics. It does not read your contacts or your call log, and it never blocks, records or listens to calls.
 
@@ -31,6 +33,8 @@ Call2Chat è sviluppata da Gabbah Productions (Italia).
 - Il numero delle chiamate in arrivo da numeri non in rubrica, fornito da Android.
 - Il testo del tuo messaggio e le tue impostazioni.
 - L'elenco degli ultimi 30 numeri sconosciuti che ti hanno chiamato, con data e ora, per poter mandare il messaggio anche dopo.
+- Sui telefoni con doppia SIM, su quale SIM è arrivata la chiamata (per rispondere con l'app scelta per quel numero). Serve il permesso "Telefono" ed è usato solo per questo.
+- Le foto, il video e il PDF che scegli come allegati: vengono copiati dentro l'app e inviati solo quando tocchi Invia.
 
 **Dove sono salvati.** Solo sul tuo telefono. Call2Chat non ha server né account, non invia, vende o condivide dati, e non contiene pubblicità né statistiche. Non legge la rubrica né il registro chiamate, e non blocca, registra o ascolta le chiamate.
 

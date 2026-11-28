@@ -101,7 +101,15 @@ class Prefs(ctx: Context) {
 
     // ---- Statistiche ----
 
-    data class Stats(val calls7: Int, val sent7: Int, val callsAll: Int, val sentAll: Int, val days: List<Pair<String, Int>>)
+    data class Day(val label: String, val calls: Int, val sent: Int)
+    data class Stats(val calls7: Int, val sent7: Int, val callsAll: Int, val sentAll: Int, val days: List<Day>,
+                     val callsPrev7: Int, val sentPrev7: Int, val topTemplate: String?, val topCount: Int)
+
+    fun countTemplate(name: String) {
+        val o = JSONObject(p.getString("tpl_used", "{}"))
+        o.put(name, o.optInt(name) + 1)
+        p.edit().putString("tpl_used", o.toString()).apply()
+    }
 
     private fun dayKey(c: Calendar) = "%04d%02d%02d".format(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH))
 
@@ -123,24 +131,44 @@ class Prefs(ctx: Context) {
 
     fun stats(now: Calendar = Calendar.getInstance()): Stats {
         val o = JSONObject(p.getString("stats", "{}"))
-        val days = (6 downTo 0).map { back ->
+        fun day(back: Int): Day {
             val c = now.clone() as Calendar
             c.add(Calendar.DAY_OF_YEAR, -back)
             val d = o.optJSONObject(dayKey(c))
-            Triple(java.text.SimpleDateFormat("EEE", java.util.Locale.getDefault()).format(c.time),
+            return Day(java.text.SimpleDateFormat("EEE", java.util.Locale.getDefault()).format(c.time),
                 d?.optInt("c") ?: 0, d?.optInt("s") ?: 0)
         }
+        val days = (6 downTo 0).map { day(it) }
+        val prev = (13 downTo 7).map { day(it) }
+        val used = JSONObject(p.getString("tpl_used", "{}"))
+        val top = used.keys().asSequence().maxByOrNull { used.optInt(it) }
         return Stats(
-            calls7 = days.sumOf { it.second }, sent7 = days.sumOf { it.third },
+            calls7 = days.sumOf { it.calls }, sent7 = days.sumOf { it.sent },
             callsAll = p.getInt("stat_c", 0), sentAll = p.getInt("stat_s", 0),
-            days = days.map { it.first to it.second }
+            days = days, callsPrev7 = prev.sumOf { it.calls }, sentPrev7 = prev.sumOf { it.sent },
+            topTemplate = top, topCount = top?.let { used.optInt(it) } ?: 0
         )
     }
 
-    /** "com.whatsapp" oppure "com.whatsapp.w4b" */
-    var targetPackage: String
-        get() = p.getString("target", WA) ?: WA
-        set(v) = p.edit().putString("target", v).apply()
+    /** Canale scelto (prima della 1.8 c'era solo WhatsApp / Business) */
+    var channel: Channel
+        get() = p.getString("channel", null)?.let { Channel.of(it) }
+            ?: if (p.getString("target", WA) == WA_BUSINESS) Channel.WA_BUSINESS else Channel.AUTO
+        set(v) = p.edit().putString("channel", v.id).apply()
+
+    // ---- Doppia SIM: ogni SIM attiva/spenta e con il suo canale ----
+
+    fun simEnabled(sub: Int) = p.getBoolean("sim_on_$sub", true)
+    fun setSimEnabled(sub: Int, v: Boolean) = p.edit().putBoolean("sim_on_$sub", v).apply()
+    fun simChannel(sub: Int): Channel? = p.getString("sim_ch_$sub", null)?.let { Channel.of(it) }
+    fun setSimChannel(sub: Int, c: Channel) = p.edit().putString("sim_ch_$sub", c.id).apply()
+
+    /** Canale per la chiamata arrivata su quella SIM (o quello generale) */
+    fun channelFor(sim: Int?): Channel = sim?.takeIf { it >= 0 }?.let { simChannel(it) } ?: channel
+
+    var lastTab: Int
+        get() = p.getInt("tab", 0)
+        set(v) = p.edit().putInt("tab", v).apply()
 
     /** Ore prima di riproporre lo stesso numero (0 = sempre) */
     var cooldownHours: Int
@@ -190,20 +218,20 @@ class Prefs(ctx: Context) {
 
     // ---- Storico delle ultime chiamate (max 30) ----
 
-    data class Entry(val number: String, val time: Long, val sent: Boolean)
+    data class Entry(val number: String, val time: Long, val sent: Boolean, val sim: Int = -1)
 
     fun history(): List<Entry> {
         val arr = JSONArray(p.getString("history", "[]"))
         return (0 until arr.length()).map {
             val o = arr.getJSONObject(it)
-            Entry(o.getString("n"), o.getLong("t"), o.optBoolean("s"))
+            Entry(o.getString("n"), o.getLong("t"), o.optBoolean("s"), o.optInt("m", -1))
         }
     }
 
     private fun saveHistory(list: List<Entry>) {
         val arr = JSONArray()
         list.take(30).forEach {
-            arr.put(JSONObject().put("n", it.number).put("t", it.time).put("s", it.sent))
+            arr.put(JSONObject().put("n", it.number).put("t", it.time).put("s", it.sent).put("m", it.sim))
         }
         p.edit().putString("history", arr.toString()).apply()
     }
@@ -226,8 +254,8 @@ class Prefs(ctx: Context) {
     fun unregisterListener(l: SharedPreferences.OnSharedPreferenceChangeListener) =
         p.unregisterOnSharedPreferenceChangeListener(l)
 
-    fun addCall(number: String) {
-        saveHistory(listOf(Entry(number, System.currentTimeMillis(), false)) + history())
+    fun addCall(number: String, sim: Int = -1) {
+        saveHistory(listOf(Entry(number, System.currentTimeMillis(), false, sim)) + history())
     }
 
     fun markSent(number: String) {

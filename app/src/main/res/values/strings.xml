@@ -1,43 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Call2Chat</string>
-
     <string name="default_message">Hi! I saw your call but I can\'t answer right now. Write me here and I\'ll reply as soon as I can 👍</string>
-
     <string name="channel_name">Calls from unknown numbers</string>
     <string name="channel_desc">Ready-to-send message for numbers not in your contacts</string>
     <string name="notif_title">Call from %1$s</string>
-    <string name="notif_text">Tap to send your message on WhatsApp</string>
+    <string name="notif_text">Tap to send your message on %1$s</string>
     <string name="notif_action">Send</string>
     <string name="notif_limit">You used your free messages: unlock Pro to keep going</string>
-    <string name="no_whatsapp">WhatsApp is not installed</string>
-
-    <string name="status_setup">Finish the setup to start</string>
-    <string name="status_active">Active: unknown callers get your message</string>
-    <string name="status_paused">Paused</string>
-    <string name="status_no_wa">WhatsApp not found on this phone</string>
-
-    <string name="setup_title">Setup</string>
-    <string name="setup_desc">Three quick steps. Call2Chat never blocks calls and never reads your contacts: Android only tells it about numbers you don\'t have saved.</string>
-    <string name="btn_role">1 · Set as call screening app</string>
-    <string name="btn_role_done">✓ Call screening active</string>
-    <string name="btn_notif">2 · Allow notifications</string>
-    <string name="btn_notif_done">✓ Notifications allowed</string>
-    <string name="role_unavailable">This phone does not support call screening apps</string>
-
-    <string name="msg_title">Your messages</string>
+    <string name="no_app">The chosen app is not installed</string>
+    <string name="enable_desc">Turn Call2Chat on or off</string>
+    <string name="state_active">ACTIVE</string>
+    <string name="state_partial">ACTIVE · CHECK</string>
+    <string name="state_paused">PAUSED</string>
+    <string name="state_setup">TO SET UP</string>
+    <string name="health_ok_title">All set</string>
+    <string name="health_ok_text">Anyone who calls and isn\'t in your contacts gets your message, even when the app is closed.</string>
+    <string name="health_warn_title">Working, but may stop when closed</string>
+    <string name="health_bad_title">Not working yet</string>
+    <string name="health_missing">%1$d steps left to finish the setup.</string>
+    <string name="health_paused_title">Paused</string>
+    <string name="health_paused_text">Turn the switch on to answer unknown callers again.</string>
+    <string name="health_no_app_title">App to reply with is missing</string>
+    <string name="health_no_app">%1$s is not installed: choose another one in «Send with».</string>
+    <string name="health_action">Finish setup</string>
+    <string name="mini_calls">calls</string>
+    <string name="mini_sent">messages</string>
+    <string name="mini_rate">replied</string>
+    <string name="tab_messages">Messages</string>
+    <string name="tab_hours">Hours</string>
+    <string name="tab_stats">Stats</string>
+    <string name="tab_rules">Rules</string>
+    <string name="preview_label">PREVIEW</string>
+    <string name="msg_text_hint">Message text</string>
+    <string name="tpl_default_name">Standard</string>
+    <string name="tpl_meeting_name">In a meeting</string>
+    <string name="tpl_meeting_text">Hi! I\'m in a meeting and can\'t answer. I\'ll call you back around {time+1}, or write me here 👍</string>
+    <string name="tpl_ride_name">Riding</string>
+    <string name="tpl_ride_text">Hi! I\'m riding and can\'t answer 🏍️ Write me here, I\'ll reply as soon as I stop.</string>
+    <string name="tpl_closed_name">Closed</string>
+    <string name="tpl_closed_text">Hi! We\'re closed right now. Tell me here what you need and I\'ll reply {tomorrow} morning 🙂</string>
+    <string name="tpl_name_hint">Name (e.g. In a meeting)</string>
+    <string name="tpl_make_default">Make default</string>
+    <string name="tpl_delete">Delete</string>
+    <string name="tpl_new_name">New</string>
+    <string name="tpl_default_set">Default message set</string>
+    <string name="tpl_delete_q">Delete «%1$s»?</string>
+    <string name="vars_hint">Tap to insert: they fill in by themselves when sending</string>
+    <string name="att_title">Attachments</string>
+    <string name="att_desc">Sent with every message: up to 3 photos, 1 video and 1 PDF (e.g. your catalogue).</string>
+    <string name="att_add_photo">Photo</string>
+    <string name="att_add_video">Video</string>
+    <string name="att_add_pdf">PDF</string>
+    <string name="att_remove">Remove attachment</string>
+    <string name="att_error">Couldn\'t add this file</string>
+    <string name="att_limit">Maximum %1$d</string>
+    <string name="att_video">video</string>
+    <string name="att_pdf">PDF</string>
+    <string name="att_with">📎  With %1$s</string>
     <string name="send_with">Send with</string>
-    <string name="wa" translatable="false">WhatsApp</string>
-    <string name="wa_business" translatable="false">WA Business</string>
-    <string name="btn_test">Preview in WhatsApp</string>
-
+    <string name="ch_auto">Automatic</string>
+    <string name="ch_auto_now">Automatic (%1$s)</string>
+    <string name="ch_whatsapp">WhatsApp</string>
+    <string name="ch_wa_business">WhatsApp Business</string>
+    <string name="ch_sms">SMS</string>
+    <string name="ch_telegram">Telegram</string>
+    <string name="ch_wechat">WeChat</string>
+    <string name="ch_not_installed">not installed</string>
+    <string name="send_whatsapp">Send on WhatsApp</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="send_telegram">Send on Telegram</string>
+    <string name="send_wechat">Send on WeChat</string>
+    <string name="wechat_copied">Message copied: paste it in the WeChat chat with %1$s</string>
+    <string name="wechat_note">WeChat doesn\'t allow pre-filled messages: Call2Chat copies the text and opens WeChat, you paste it.</string>
+    <string name="telegram_note">Telegram opens with the message ready: choose the chat to send it to.</string>
+    <string name="btn_overlay_test">Test the Send card</string>
+    <string name="btn_test">Preview in the app</string>
+    <string name="overlay_test_toast">Leave the app: the card appears in 5 seconds</string>
+    <string name="overlay_unknown">Not in your contacts</string>
+    <string name="overlay_close">Close</string>
+    <string name="off_title">Out-of-hours message</string>
+    <string name="off_desc">Outside working hours a different message is sent automatically.</string>
+    <string name="weekend_off">Saturday and Sunday are out of hours</string>
+    <string name="off_pick">Out-of-hours message</string>
+    <string name="work_from">From %1$s</string>
+    <string name="work_to">to %1$s</string>
+    <string name="off_use">Out of hours: %1$s</string>
+    <string name="off_now">Right now it would send: %1$s</string>
+    <string name="hours_switch">Active only during these hours</string>
+    <string name="hours_desc">Outside these hours Call2Chat does nothing.</string>
+    <string name="hours_from">From %1$s</string>
+    <string name="hours_to">to %1$s</string>
+    <string name="stats_rate_label">REPLIES SENT · 7 DAYS</string>
+    <string name="stats_rate_text">%1$d messages for %2$d unknown calls</string>
+    <string name="stats_trend">%1$s pts vs last week</string>
+    <string name="stats_calls">unknown calls</string>
+    <string name="stats_sent">messages sent</string>
+    <string name="stats_title">Last 7 days</string>
+    <string name="legend_calls">calls</string>
+    <string name="legend_sent">sent</string>
+    <string name="stats_all">All time: %1$d calls · %2$d messages</string>
+    <string name="stats_top">Most used message</string>
+    <string name="stats_top_value">%1$s · %2$d times</string>
+    <string name="history_title">Recent unknown calls</string>
+    <string name="history_empty">No calls yet</string>
+    <string name="history_send">Send</string>
+    <string name="history_sent">sent</string>
+    <string name="pick_message">Which message?</string>
     <string name="rules_title">Rules</string>
     <string name="cooldown_hint">Don\'t repeat the same number for (hours)</string>
-    <string name="hours_switch">Only during these hours</string>
-    <string name="hours_from">From %1$s</string>
-    <string name="hours_to">To %1$s</string>
+    <string name="cooldown_help">The card always appears; this only limits notifications</string>
     <string name="excluded_hint">Excluded numbers (one per line)</string>
-
     <string name="plan_title">Plan</string>
     <string name="plan_free">Free messages used: %1$d of %2$d</string>
     <string name="plan_pro">Pro unlocked: unlimited messages. Thank you!</string>
@@ -46,89 +119,48 @@
     <string name="btn_pro_done">Pro active</string>
     <string name="billing_unavailable">Purchase not available right now. Try again later.</string>
     <string name="paywall_title">Free messages finished</string>
-    <string name="paywall_text">You sent your %1$d free messages. Unlock Pro once to keep answering every unknown caller, forever.</string>
+    <string name="paywall_text">You sent your %1$d free messages. Unlock Pro once and answer every unknown caller, forever.</string>
     <string name="later">Later</string>
-
-    <string name="history_title">Recent unknown calls</string>
-    <string name="history_empty">No calls yet</string>
-    <string name="history_send">Send</string>
-    <string name="history_sent">sent</string>
-
-    <string name="footer">Everything stays on your phone. Works with WhatsApp; not affiliated with WhatsApp or Meta.</string>
-    <string name="role_help_title">One more step</string>
-    <string name="role_help_text">Your phone did not show the request. Open Settings → Default apps → "Caller ID &amp; spam app" (or "Call screening") and choose Call2Chat.</string>
-    <string name="role_help_open">Open settings</string>
-    <string name="btn_overlay">3 · Show the Send button during calls</string>
-    <string name="btn_overlay_done">✓ Send button during calls</string>
-    <string name="overlay_sub">Not in your contacts: send your message now</string>
-    <string name="overlay_send">Send on WhatsApp</string>
-    <string name="overlay_close">Close</string>
-    <string name="btn_overlay_test">Test the Send card</string>
-    <string name="overlay_test_toast">Leave the app: the card appears in 5 seconds</string>
-    <string name="btn_xiaomi">Xiaomi: allow pop-ups in background</string>
-    <string name="xiaomi_hint">Turn on "Display pop-up windows while running in the background" and "Show on lock screen"</string>
+    <string name="btn_setup">Guided setup</string>
+    <string name="footer">Everything stays on your phone. Not affiliated with WhatsApp, Meta, Telegram or Tencent.</string>
+    <string name="role_unavailable">This phone does not support call screening apps</string>
     <string name="update_downloading">Downloading Call2Chat %1$s…</string>
     <string name="update_allow">Allow Call2Chat to install updates, then go back</string>
-
-    <string name="tpl_default_name">Standard</string>
-    <string name="tpl_meeting_name">In a meeting</string>
-    <string name="tpl_meeting_text">Hi! I\'m in a meeting and can\'t answer. I\'ll call you back around {time+1}, or write me here 👍</string>
-    <string name="tpl_ride_name">Riding</string>
-    <string name="tpl_ride_text">Hi! I\'m riding and can\'t answer 🏍️ Write me here, I\'ll reply as soon as I stop.</string>
-    <string name="tpl_closed_name">Closed</string>
-    <string name="tpl_closed_text">Hi! We\'re closed right now. Tell me here what you need and I\'ll reply {tomorrow} morning 🙂</string>
-    <string name="tpl_hint">⭐ = default message. During the call you can pick another one.</string>
-    <string name="tpl_name_hint">Name (e.g. In a meeting)</string>
-    <string name="tpl_add">+ New</string>
-    <string name="tpl_make_default">⭐ Make default</string>
-    <string name="tpl_delete">Delete</string>
-    <string name="tpl_new_name">New</string>
-    <string name="tpl_default_set">Default message set</string>
-    <string name="tpl_delete_q">Delete «%1$s»?</string>
-    <string name="vars_hint">Tap to insert: they fill in when sending</string>
-    <string name="vars_preview">Preview: %1$s</string>
-    <string name="off_title">Out-of-hours message</string>
-    <string name="off_desc">Outside working hours a different message is used automatically.</string>
-    <string name="weekend_off">Saturday and Sunday are out of hours</string>
-    <string name="off_pick">Out-of-hours message</string>
-    <string name="work_from">From %1$s</string>
-    <string name="work_to">to %1$s</string>
-    <string name="off_use">Out of hours uses: %1$s</string>
-    <string name="off_now">Right now it would send: %1$s</string>
-    <string name="stats_title">Stats · last 7 days</string>
-    <string name="stats_calls">unknown calls</string>
-    <string name="stats_sent">messages sent</string>
-    <string name="stats_all">All time: %1$d calls · %2$d messages</string>
-    <string name="pick_message">Which message?</string>
-    <string name="health_no_wa">Install WhatsApp or WhatsApp Business</string>
-    <string name="health_bad_title">Not working yet</string>
-    <string name="health_warn_title">Working, but may stop when closed</string>
-    <string name="health_missing">%1$d steps missing · tap to finish</string>
-    <string name="health_ok_title">All set</string>
-    <string name="health_ok_text">Works even when the app is closed</string>
     <string name="setup_progress">Step %1$d of %2$d</string>
     <string name="setup_progress_done">%1$d of %2$d steps done</string>
     <string name="setup_done_title">All set!</string>
     <string name="setup_done_text">Call2Chat works even when closed. When a number not in your contacts calls, the Send card appears over the call.</string>
     <string name="setup_partial_title">Almost ready</string>
-    <string name="setup_partial_text">You skipped some steps: the app may not alert you when closed. Finish them any time by tapping the card at the top.</string>
-    <string name="setup_tip_recents">Tip: open recent apps, long-press Call2Chat and tap the lock 🔒 so it isn\'t closed.</string>
+    <string name="setup_partial_text">You skipped some steps: the app may not alert you when closed. Finish them any time from the card at the top.</string>
+    <string name="setup_tip_recents">Tip: open recent apps, long-press Call2Chat and tap the lock so it isn\'t closed.</string>
     <string name="setup_go_app">Go to the app</string>
-    <string name="setup_skip">Skip for now</string>
-    <string name="setup_confirm">Done ✓</string>
+    <string name="setup_skip">Skip</string>
+    <string name="setup_confirm">Done</string>
     <string name="step_open">Open settings</string>
     <string name="step_role_title">Recognise calls</string>
     <string name="step_role_text">Choose Call2Chat as «Caller ID &amp; spam app». Android will only tell it about numbers not in your contacts.\n\nIt never blocks, records or listens to calls.</string>
     <string name="step_role_btn">Set Call2Chat</string>
+    <string name="step_sims_title">Which numbers?</string>
+    <string name="step_sims_text">Your phone has two SIMs. Choose on which numbers Call2Chat is active and which app replies for each one.</string>
+    <string name="step_sims_btn">Allow to recognise the SIM</string>
+    <string name="sims_none">No active SIM found</string>
+    <string name="sims_pick">Choose the SIM</string>
+    <string name="sim_label">SIM %1$d</string>
+    <string name="sim_reply_with">Replies with %1$s</string>
+    <string name="sim_off">off</string>
+    <string name="sim_turn_off">Turn off on this SIM</string>
+    <string name="sim_turn_on">Turn on on this SIM</string>
+    <string name="step_channel_title">Which WhatsApp?</string>
+    <string name="step_channel_text">You have both WhatsApp and WhatsApp Business. Choose which one replies to unknown callers. You can change it later.</string>
     <string name="step_notif_title">Notifications</string>
     <string name="step_notif_text">Needed to alert you with the ready message when someone calls.</string>
     <string name="step_notif_btn">Allow notifications</string>
     <string name="step_overlay_title">Button during the call</string>
-    <string name="step_overlay_text">Turn on «Display over other apps» for Call2Chat: while the phone rings, the Send on WhatsApp card appears.</string>
+    <string name="step_overlay_text">Turn on «Display over other apps» for Call2Chat: while the phone rings, the Send card appears.</string>
     <string name="step_keep_title">Don\'t pause the app</string>
-    <string name="step_keep_text">Turn off «Pause app activity if unused» (or «Remove permissions if app isn\'t used»). Otherwise Android stops it after a few weeks.</string>
+    <string name="step_keep_text">Turn off «Pause app activity if unused». Otherwise Android stops it after a few weeks.</string>
     <string name="step_battery_title">Unrestricted battery</string>
-    <string name="step_battery_text">Open «Battery» and choose «Unrestricted». This way Call2Chat alerts you even when closed.\n\nThen come back and tap Done.</string>
+    <string name="step_battery_text">Open «Battery» and choose «Unrestricted», so Call2Chat works even when closed.\n\nThen come back and tap Done.</string>
     <string name="step_xiaomi_title">Xiaomi permissions</string>
     <string name="step_xiaomi_text">Turn on:\n• Autostart\n• Display pop-up windows while running in the background\n• Show on lock screen\n\nThen come back and tap Done.</string>
     <string name="step_samsung_title">Samsung: no sleeping</string>
@@ -139,4 +171,15 @@
     <string name="step_vivo_text">Allow Call2Chat to auto-start and run in the background.\n\nThen come back and tap Done.</string>
     <string name="step_huawei_title">App launch</string>
     <string name="step_huawei_text">In «App launch» set Call2Chat to «Manage manually» and turn on all three switches.\n\nThen come back and tap Done.</string>
+    <plurals name="att_photos">
+        <item quantity="one">%1$d photo</item>
+        <item quantity="other">%1$d photos</item>
+    </plurals>
+    <string-array name="var_tokens" translatable="false">
+        <item>{time}</item>
+        <item>{time+1}</item>
+        <item>{day}</item>
+        <item>{tomorrow}</item>
+        <item>{date}</item>
+    </string-array>
 </resources>

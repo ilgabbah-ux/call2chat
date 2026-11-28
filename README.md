@@ -9,6 +9,8 @@ Ti chiama un numero che non hai in rubrica? Call2Chat ti mostra una notifica: un
 3. Nell'app tocca i tre pulsanti: **filtro chiamate**, **notifiche** e **Invia durante la chiamata**.
 4. Scrivi il tuo messaggio e fatti chiamare da un numero che non hai in rubrica.
 
-La chiamata non viene mai bloccata. 100 messaggi gratis, poi sblocco Pro (attivo quando l'app sarà sul Play Store).
+Funziona con WhatsApp, WhatsApp Business, SMS, Telegram e WeChat, con allegati (3 foto, 1 video, 1 PDF), doppia SIM, messaggi pronti, orari e statistiche. In 7 lingue. La chiamata non viene mai bloccata. 100 messaggi gratis, poi sblocco Pro (attivo quando l'app sarà sul Play Store).
 
 Funziona con WhatsApp; non affiliata a WhatsApp o Meta.
+
+Fonts: Inter and Space Grotesk, SIL Open Font License 1.1.

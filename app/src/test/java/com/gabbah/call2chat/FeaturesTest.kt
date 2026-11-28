@@ -74,7 +74,8 @@ class FeaturesTest {
         assertEquals(3, s.calls7)
         assertEquals(1, s.sent7)
         assertEquals(7, s.days.size)
-        assertEquals(2, s.days.last().second)
+        assertEquals(2, s.days.last().calls)
+        assertEquals(1, s.days.last().sent)
     }
 
     @Test fun cardLetsYouPickAnotherMessage() {
@@ -88,7 +89,7 @@ class FeaturesTest {
         val views = all(root)
         views.filterIsInstance<TextView>().first { it.text == "Sono in moto" }.performClick()
         assertTrue(views.filterIsInstance<TextView>().any { it.text.startsWith("Ciao! Sono in moto") })
-        views.filterIsInstance<Button>().first { it.text.contains("WhatsApp") }.performClick()
+        views.filterIsInstance<Button>().first { it.text == "Invia SMS" }.performClick()
         shadowOf(Looper.getMainLooper()).idle()
         val started = shadowOf(app).nextStartedActivity
         assertEquals(2, started.getIntExtra(SendActivity.EXTRA_TEMPLATE, -1))
@@ -98,7 +99,7 @@ class FeaturesTest {
     @Test fun setupAndMainOpen() {
         ActivityScenario.launch(SetupActivity::class.java).use { s ->
             s.onActivity { a ->
-                assertEquals("Passo 1 di ${Health.steps().size}", a.findViewById<TextView>(R.id.progress).text)
+                assertEquals("Passo 1 di ${Health.steps(a).size}", a.findViewById<TextView>(R.id.progress).text)
                 a.findViewById<Button>(R.id.skip).performClick()
                 a.recreate()
             }
@@ -106,8 +107,12 @@ class FeaturesTest {
         ActivityScenario.launch(MainActivity::class.java).use { s ->
             s.onActivity { a ->
                 assertTrue(a.findViewById<TextView>(R.id.healthTitle).text.isNotEmpty())
-                a.findViewById<Button>(R.id.btnTplAdd).performClick()
+                val row = a.findViewById<android.widget.LinearLayout>(R.id.tplRow)
+                row.getChildAt(row.childCount - 1).performClick()   // "+ Nuovo"
                 assertEquals(5, Prefs(a).templates().size)
+                // tab Statistiche
+                (a.findViewById<android.widget.LinearLayout>(R.id.tabs).getChildAt(2)).performClick()
+                assertEquals(android.view.View.VISIBLE, a.findViewById<android.view.View>(R.id.tabStats).visibility)
                 a.recreate()
             }
         }

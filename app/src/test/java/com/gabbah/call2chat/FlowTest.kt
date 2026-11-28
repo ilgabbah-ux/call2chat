@@ -21,6 +21,7 @@ class FlowTest {
 
     @Test fun unknownCallShowsNotificationThenOpensWhatsApp() {
         shadowOf(app).grantPermissions(Manifest.permission.POST_NOTIFICATIONS)
+        shadowOf(app.packageManager).installPackage(android.content.pm.PackageInfo().apply { packageName = "com.whatsapp" })
         Core.onUnknownCall(app, "+39 333 1234567")
         val nm = app.getSystemService(NotificationManager::class.java)
         assertEquals(1, shadowOf(nm).allNotifications.size)

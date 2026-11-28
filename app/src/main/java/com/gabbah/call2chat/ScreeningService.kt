@@ -21,6 +21,6 @@ class ScreeningService : CallScreeningService() {
         if (details.handlePresentation != TelecomManager.PRESENTATION_ALLOWED) return
         val raw = details.handle?.schemeSpecificPart ?: return
 
-        Core.onUnknownCall(this, raw)
+        Core.onUnknownCall(this, raw, Sims.subIdFor(this, details.accountHandle) ?: -1)
     }
 }

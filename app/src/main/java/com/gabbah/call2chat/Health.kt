@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
  */
 object Health {
 
-    enum class Step { ROLE, NOTIFICATIONS, OVERLAY, KEEP_ACTIVE, BATTERY, MAKER }
+    enum class Step { ROLE, SIMS, CHANNEL, NOTIFICATIONS, OVERLAY, KEEP_ACTIVE, BATTERY, MAKER }
 
     /** Produttori che chiudono le app in background con impostazioni proprie */
     enum class Maker { XIAOMI, SAMSUNG, OPPO, VIVO, HUAWEI, OTHER }
@@ -36,8 +36,13 @@ object Health {
     }
 
     /** I passaggi che servono su questo telefono, in ordine */
-    fun steps(): List<Step> = buildList {
+    /** Ci sono sia WhatsApp sia WhatsApp Business? */
+    fun bothWhatsApp(ctx: Context) =
+        Core.isInstalled(ctx, "com.whatsapp") && Core.isInstalled(ctx, "com.whatsapp.w4b")
+
+    fun steps(ctx: Context): List<Step> = buildList {
         add(Step.ROLE)
+        if (Sims.isDualSim(ctx)) add(Step.SIMS) else if (bothWhatsApp(ctx)) add(Step.CHANNEL)
         if (Build.VERSION.SDK_INT >= 33) add(Step.NOTIFICATIONS)
         add(Step.OVERLAY)
         if (Build.VERSION.SDK_INT >= 30) add(Step.KEEP_ACTIVE)
@@ -47,6 +52,8 @@ object Health {
 
     fun isOk(ctx: Context, s: Step): Boolean = when (s) {
         Step.ROLE -> hasRole(ctx)
+        Step.SIMS -> Sims.hasPermission(ctx) && Prefs(ctx).isConfirmed(s.name)
+        Step.CHANNEL -> Prefs(ctx).isConfirmed(s.name) || Prefs(ctx).channel != Channel.AUTO
         Step.NOTIFICATIONS -> Build.VERSION.SDK_INT < 33 ||
             ContextCompat.checkSelfPermission(ctx, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
         Step.OVERLAY -> Settings.canDrawOverlays(ctx)
@@ -58,9 +65,9 @@ object Health {
     }
 
     /** Passaggi che si possono solo confermare a mano */
-    fun needsManualConfirm(s: Step) = s == Step.MAKER || s == Step.BATTERY
+    fun needsManualConfirm(s: Step) = s == Step.MAKER || s == Step.BATTERY || s == Step.SIMS || s == Step.CHANNEL
 
-    fun missing(ctx: Context) = steps().filterNot { isOk(ctx, it) }
+    fun missing(ctx: Context) = steps(ctx).filterNot { isOk(ctx, it) }
 
     /** Senza questi l'app non funziona proprio */
     fun essentialMissing(ctx: Context) =

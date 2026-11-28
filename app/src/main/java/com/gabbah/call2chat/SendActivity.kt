@@ -27,12 +27,15 @@ class SendActivity : Activity() {
         }
 
         val tpl = if (intent.hasExtra(EXTRA_TEMPLATE)) intent.getIntExtra(EXTRA_TEMPLATE, 0) else null
-        if (Core.openChat(this, number, prefs.messageFor(tpl))) {
+        val idx = tpl ?: prefs.autoIndex()
+        val sim = intent.getIntExtra(EXTRA_SIM, -1)
+        if (Channel.open(this, prefs.channelFor(sim), number, prefs.messageFor(idx))) {
+            prefs.templates().getOrNull(idx)?.let { prefs.countTemplate(it.name) }
             if (!prefs.isPro) prefs.sentCount = prefs.sentCount + 1
             prefs.markSent(number)
             prefs.countSent()
         } else {
-            Toast.makeText(this, R.string.no_whatsapp, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.no_app, Toast.LENGTH_LONG).show()
         }
         finish()
     }
@@ -40,5 +43,6 @@ class SendActivity : Activity() {
     companion object {
         const val EXTRA_NUMBER = "number"
         const val EXTRA_TEMPLATE = "template"
+        const val EXTRA_SIM = "sim"
     }
 }
