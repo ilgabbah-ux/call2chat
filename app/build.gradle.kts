@@ -19,8 +19,8 @@ android {
         applicationId = "com.gabbah.call2chat"
         minSdk = 29
         targetSdk = 36
-        versionCode = 13
-        versionName = "1.9.2"
+        versionCode = 14
+        versionName = "1.9.3"
     }
 
     signingConfigs {

@@ -28,7 +28,7 @@ object Attachments {
             val o = arr.getJSONObject(it)
             val k = Kind.entries.firstOrNull { k -> k.id == o.optString("k") } ?: return@mapNotNull null
             Item(k, o.optString("f"), o.optString("n"))
-        }.filter { File(dir(ctx), it.file).exists() }
+        }.filter { File(dir(ctx), it.file).exists() }.let { migrate(ctx, it) }
     }
 
     private fun save(ctx: Context, list: List<Item>) {
@@ -53,8 +53,10 @@ object Attachments {
         }
         val ext = name.substringAfterLast('.', "").takeIf { it.length in 1..5 }
             ?: when (k) { Kind.PHOTO -> "jpg"; Kind.VIDEO -> "mp4"; Kind.PDF -> "pdf" }
-        val file = "${k.id}_${System.currentTimeMillis()}.$ext"
+        // Ogni file in una sua cartella col nome originale: chi lo riceve vede "Catalogo 2026.pdf"
+        val file = "${k.id}_${System.currentTimeMillis()}/" + safeName(name, ext)
         return try {
+            File(dir(ctx), file).parentFile?.mkdirs()
             cr.openInputStream(uri)?.use { input -> File(dir(ctx), file).outputStream().use { input.copyTo(it) } }
                 ?: return false
             save(ctx, list + Item(k, file, name))
@@ -64,8 +66,35 @@ object Attachments {
         }
     }
 
+    /** Nome file pulito (niente caratteri vietati), con l'estensione giusta */
+    fun safeName(name: String, ext: String): String {
+        var n = name.replace(Regex("""[\\/:*?"<>|\u0000-\u001f]"""), "_").trim().trimStart('.')
+        if (n.isEmpty()) n = "file"
+        if (!n.endsWith(".$ext", ignoreCase = true)) n = "$n.$ext"
+        if (n.length > 80) n = n.take(80 - ext.length - 1) + ".$ext"
+        return n
+    }
+
+    /** File salvati dalle versioni precedenti (nome tipo pdf_123.pdf): li sposto col nome originale */
+    private fun migrate(ctx: Context, items: List<Item>): List<Item> {
+        if (items.none { '/' !in it.file }) return items
+        val out = items.map { it ->
+            if ('/' in it.file) return@map it
+            val old = File(dir(ctx), it.file)
+            val ext = it.file.substringAfterLast('.', "bin")
+            val nf = it.file.substringBeforeLast('.') + "/" + safeName(it.name, ext)
+            val dest = File(dir(ctx), nf)
+            dest.parentFile?.mkdirs()
+            if (old.renameTo(dest)) it.copy(file = nf) else it
+        }
+        save(ctx, out)
+        return out
+    }
+
     fun remove(ctx: Context, item: Item) {
-        File(dir(ctx), item.file).delete()
+        val f = File(dir(ctx), item.file)
+        f.delete()
+        if ('/' in item.file) f.parentFile?.delete()
         save(ctx, list(ctx).filter { it.file != item.file })
     }
 
