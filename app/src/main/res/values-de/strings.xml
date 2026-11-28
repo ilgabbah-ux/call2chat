@@ -179,4 +179,7 @@
     <string name="theme_light">Hell</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Anhänge: der direkte Chat wurde nicht geöffnet (%1$s)</string>
+    <string name="next_title">Noch zu senden: %1$s</string>
+    <string name="next_send">%1$s senden</string>
+    <string name="next_hint">Tippen, um es im selben Chat zu senden</string>
 </resources>

@@ -179,4 +179,7 @@
     <string name="theme_light">Clair</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Pièces jointes : la discussion directe ne s\'est pas ouverte (%1$s)</string>
+    <string name="next_title">Reste à envoyer : %1$s</string>
+    <string name="next_send">Envoyer %1$s</string>
+    <string name="next_hint">Touche pour l\'envoyer dans la même discussion</string>
 </resources>

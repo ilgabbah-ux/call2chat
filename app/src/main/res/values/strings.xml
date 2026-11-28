@@ -187,4 +187,7 @@
     <string name="theme_light">Light</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Attachments: direct chat did not open (%1$s)</string>
+    <string name="next_title">Still to send: %1$s</string>
+    <string name="next_send">Send %1$s</string>
+    <string name="next_hint">Tap to send it in the same chat</string>
 </resources>

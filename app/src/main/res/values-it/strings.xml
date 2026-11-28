@@ -186,4 +186,7 @@
     <string name="theme_light">Chiaro</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Allegati: la chat diretta non si è aperta (%1$s)</string>
+    <string name="next_title">Ancora da inviare: %1$s</string>
+    <string name="next_send">Invia %1$s</string>
+    <string name="next_hint">Tocca per inviarlo nella stessa chat</string>
 </resources>

@@ -8,21 +8,29 @@ import androidx.core.app.NotificationManagerCompat
 
 /**
  * Invisibile: apre l'app scelta col messaggio pronto e si chiude.
- * Con gli allegati i passaggi possono essere due (foto/video, poi PDF):
- * il secondo parte da solo quando si torna dal primo.
+ * Con gli allegati i passaggi possono essere più di uno (foto, video, PDF):
+ * dopo il primo, i successivi partono dalla barra/notifica di NextBar.
  */
 class SendActivity : Activity() {
 
-    private var steps = ArrayList<Intent>()
-    private var launched = false
-    private var away = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Passaggio successivo (video, PDF…) lanciato dalla barra o dalla notifica
+        if (intent.getBooleanExtra(EXTRA_NEXT, false)) {
+            NotificationManagerCompat.from(this).cancel(4711)
+            val next = NextBar.pop()
+            if (next != null) launch(next)
+            if (NextBar.hasNext()) NextBar.show(this)
+            finish()
+            return
+        }
+
         val number = intent.getStringExtra(EXTRA_NUMBER)
         if (number == null) { finish(); return }
         val prefs = Prefs(this)
         NotificationManagerCompat.from(this).cancel(number.hashCode())
+        NextBar.clear(this)
 
         if (!prefs.canSend) {
             startActivity(
@@ -39,52 +47,39 @@ class SendActivity : Activity() {
         val sim = intent.getIntExtra(EXTRA_SIM, -1)
         val channel = prefs.channelFor(sim)
         val text = prefs.messageFor(idx)
-        steps = ArrayList(Channel.plan(this, channel, number, text))
+        val steps = Channel.plan(this, channel, number, text)
 
         // Primo passaggio. Se la chat diretta non si apre: scelta del contatto con gli allegati;
-        // solo come ultima spiaggia il testo da solo. L'errore viene mostrato per capire il motivo.
-        val ok = runNext(first = true) ||
-            Channel.textOnly(this, channel, number, text)?.let { steps.clear(); Channel.start(this, it, newTask = false) } == true
+        // solo come ultima spiaggia il testo da solo.
+        val ok = steps.firstOrNull()?.let { launch(it) } == true ||
+            Channel.textOnly(this, channel, number, text)?.let { Channel.start(this, it) } == true
 
         if (ok) {
             prefs.templates().getOrNull(idx)?.let { prefs.countTemplate(it.name) }
             if (!prefs.isPro) prefs.sentCount = prefs.sentCount + 1
             prefs.markSent(number)
             prefs.countSent()
-            launched = true
-            if (steps.isEmpty()) finish()
+            if (steps.size > 1) NextBar.offer(this, steps.drop(1))
         } else {
             Toast.makeText(this, R.string.no_app, Toast.LENGTH_LONG).show()
-            finish()
         }
+        finish()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (launched) away = true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Tornati dal passaggio precedente: parte il successivo (es. il PDF)
-        if (!launched || !away) return
-        away = false
-        if (!runNext(first = false)) finish()
-    }
-
-    private fun runNext(first: Boolean): Boolean {
-        val next = steps.removeFirstOrNull() ?: return false
-        val err = Channel.tryStart(this, next, newTask = false) ?: return true
-        if (next.hasExtra(Intent.EXTRA_STREAM)) {
+    /** Apre un passaggio; se la chat diretta non si apre prova con la scelta del contatto */
+    private fun launch(i: Intent): Boolean {
+        val err = Channel.tryStart(this, i) ?: return true
+        if (i.hasExtra(Intent.EXTRA_STREAM)) {
             Toast.makeText(this, getString(R.string.att_failed, err), Toast.LENGTH_LONG).show()
-            if (Channel.start(this, Channel.chooser(next), newTask = false)) return true
+            return Channel.start(this, Channel.chooser(i))
         }
-        return if (first) false else runNext(false)
+        return false
     }
 
     companion object {
         const val EXTRA_NUMBER = "number"
         const val EXTRA_TEMPLATE = "template"
         const val EXTRA_SIM = "sim"
+        const val EXTRA_NEXT = "next"
     }
 }

@@ -178,4 +178,7 @@
     <string name="theme_light">浅色</string>
     <string name="theme_auto">自动</string>
     <string name="att_failed">附件：无法直接打开聊天（%1$s）</string>
+    <string name="next_title">还需发送：%1$s</string>
+    <string name="next_send">发送%1$s</string>
+    <string name="next_hint">点击在同一聊天中发送</string>
 </resources>

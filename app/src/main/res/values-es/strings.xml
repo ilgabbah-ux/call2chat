@@ -179,4 +179,7 @@
     <string name="theme_light">Claro</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Adjuntos: no se abrió el chat directo (%1$s)</string>
+    <string name="next_title">Falta enviar: %1$s</string>
+    <string name="next_send">Enviar %1$s</string>
+    <string name="next_hint">Toca para enviarlo en el mismo chat</string>
 </resources>

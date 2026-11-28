@@ -179,4 +179,7 @@
     <string name="theme_light">Claro</string>
     <string name="theme_auto">Auto</string>
     <string name="att_failed">Anexos: a conversa direta não abriu (%1$s)</string>
+    <string name="next_title">Ainda por enviar: %1$s</string>
+    <string name="next_send">Enviar %1$s</string>
+    <string name="next_hint">Toque para enviar na mesma conversa</string>
 </resources>
